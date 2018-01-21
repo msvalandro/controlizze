@@ -1,0 +1,11 @@
+{
+    "extends": "airbnb",
+    "globals": {
+        "describe": true,
+        "it": true,
+        "expect": true,
+        "app": true,
+        "request": true,
+        "beforeEach": true
+    }
+}

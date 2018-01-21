@@ -1,0 +1,41 @@
+.cadastro-usuario-tela {
+    position: fixed;
+    top: 0; 
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background: -webkit-linear-gradient(left, #22d686, #24d3d3, #22d686, #24d3d3);
+    background: linear-gradient(to right, #22d686, #24d3d3, #22d686, #24d3d3);
+}
+
+.cadastro-usuario-form {
+    width: 800px;
+    height: 550px;
+    padding: 40px 40px;
+    
+    position:absolute; /*it can be fixed too*/
+    left:0; right:0;
+    top:0; bottom:40px;
+    margin: auto;
+
+    /*this to solve "the content will not be cut when the window is smaller than the content": */
+    max-width:100%;
+    max-height:100%;
+    overflow:auto;
+}
+
+.btn-black {
+    background-color: rgb(12, 12, 13);
+    color: #fff;
+}
+
+.btn-black:hover,
+.btn-black:active,
+.btn-black:focus {
+    background-color: rgb(39, 39, 58);
+    color: #fff;
+}
