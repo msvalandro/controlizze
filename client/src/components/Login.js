@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
+import Notificacao from './utils/Notificacao';
 import '../css/login.css';
 import logo from '../img/random-logo2.png';
 import { Link } from 'react-router-dom';
 
 class Login extends Component {
+
+	constructor() {
+		super();
+		this.state = {
+			msg: ''
+		}
+	}
 
 	envia(event) {
 		event.preventDefault();
@@ -29,13 +37,14 @@ class Login extends Component {
 				this.props.history.push('/');
 			})
 			.catch(error => {
-				console.log('Usuário ou senha inválidos.');
+				this.setState({msg: 'Usuário ou senha inválidos.'})
 			});
 	}
 
 	render() {
 		return(
 			<div className="fundo-tela">
+				<Notificacao texto={this.state.msg} />
 				<div className="container">
 					<div className="card card-container">
 						<img src={logo} alt="logo" className="img-card" />

@@ -37,9 +37,9 @@ app.auth = auth;
 
 consign()
   .include('models')
-  .then('api')
-  .then('controllers/auth.js')
   .then('controllers')
+  .then('routes/auth.js')
+  .then('routes')
   .into(app);
 
 export default app;

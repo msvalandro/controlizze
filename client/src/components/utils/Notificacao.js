@@ -1,0 +1,18 @@
+import React, { Component } from 'react';
+import '../../css/notificacao.css'
+
+export default class Notificacao extends Component {
+
+	render() {
+		let texto = this.props.texto;
+		return(
+			<div className="container">
+				{texto.length > 0 &&				
+				<div className="alert alert-danger" role="alert">
+					{this.props.texto}
+				</div>
+				}				
+			</div>
+		);
+	}
+}
