@@ -14,8 +14,8 @@
 
 .cadastro-usuario-form {
     width: 50%;
-    height: 70%;
-    padding: 40px 40px;
+    height: 80%;
+    padding: 40px 40px 10px 40px;
     
     position: relative; /*it can be fixed too*/
     left:0; right:0;
