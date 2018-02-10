@@ -29,7 +29,8 @@ module.exports = app => {
 					});
 					const payload = {id: usuario.id};
 					res.json({
-						token: jwt.sign(payload, config.jwtSecret, {expiresIn: 84600})
+						token: jwt.sign(payload, config.jwtSecret, {expiresIn: 84600}),
+						nome: usuario.nome
 					});
 				} else {
 					res.json('Já existe uma conta utilizando este e-mail.');

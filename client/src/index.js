@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './css/reset.css';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import './assets/css/reset.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
+import '../src/assets/css/fontawesome-all.min.css';
 import App from './App';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import CadastroUsuario from './components/CadastroUsuario';
 import registerServiceWorker from './registerServiceWorker';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 function verificaAutenticacao(component) {
     if (localStorage.getItem('auth-token') === null) {
@@ -24,7 +26,8 @@ ReactDOM.render(
 			<Route path="/login" render={props => 
 				localStorage.getItem('auth-token') === null ? <Login {...props} /> : <Redirect to="/" />} />
 			<Route path="/logout" component={Logout} />
-			<Route path="/usuario/novo" component={CadastroUsuario} />			
+			<Route path="/usuario/novo" component={CadastroUsuario} />
+			<Route path="/*" render={() => (<Redirect to={'/'}/>)} />				
 		</Switch>
 	</Router>)
 	, document.getElementById('root'));

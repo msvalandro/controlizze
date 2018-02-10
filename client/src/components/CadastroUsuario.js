@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Notificacao from './utils/Notificacao';
 import InputCustomizado from './utils/InputCustomizado';
 import InputSubmitCustomizado from './utils/InputSubmitCustomizado';
-import '../css/cadastro-usuario.css';
+import '../assets/css/cadastro-usuario.css';
 
 class CadastroUsuario extends Component {
 
@@ -40,6 +40,7 @@ class CadastroUsuario extends Component {
 			.then(result => {
 				if (result.token) {
 					localStorage.setItem('auth-token', result.token);
+					localStorage.setItem('user-name', result.nome);					
 					this.props.history.push('/');
 				} else {
 					this.setState({msg: result});					

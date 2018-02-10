@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Notificacao from './utils/Notificacao';
-import '../css/login.css';
-import logo from '../img/random-logo2.png';
+import '../assets/css/login.css';
+import logo from '../assets/img/random-logo2.png';
 import { Link } from 'react-router-dom';
 
 class Login extends Component {
@@ -34,6 +34,7 @@ class Login extends Component {
 			})
 			.then(result => {
 				localStorage.setItem('auth-token', result.token);
+				localStorage.setItem('user-name', result.nome);				
 				this.props.history.push('/');
 			})
 			.catch(error => {
