@@ -34,7 +34,6 @@ class Login extends Component {
 			})
 			.then(result => {
 				localStorage.setItem('auth-token', result.token);
-				localStorage.setItem('user-name', result.nome);				
 				this.props.history.push('/');
 			})
 			.catch(error => {
@@ -45,7 +44,7 @@ class Login extends Component {
 	render() {
 		return(
 			<div className="fundo-tela">
-				<Notificacao texto={this.state.msg} />
+				<Notificacao tipoAlerta="danger" texto={this.state.msg} />
 				<div className="container">
 					<div className="card card-container">
 						<img src={logo} alt="logo" className="img-card" />

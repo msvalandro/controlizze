@@ -16,8 +16,7 @@ module.exports = app => {
                     if (usuario.isPassword(user.senha, senha)) {
                         const payload = {id: user.id};
                         res.json({
-                            token: jwt.sign(payload, config.jwtSecret, {expiresIn: 84600}),
-                            nome: user.nome
+                            token: jwt.sign(payload, config.jwtSecret, {expiresIn: 84600})
                         });
                     } else {
                         res.sendStatus(HttpStatus.UNAUTHORIZED);

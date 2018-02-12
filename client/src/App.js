@@ -1,24 +1,59 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
+import ModalEmpresa from './components/ModalEmpresa';
 
 class App extends Component {
 
-	primeiroAcesso() {
-		// fazer requisição para rota que verifica se usuário já tem empresa cadastrada
-		// caso tenha, segue fluxo para home, caso não tenha, renderiza cadastroEmpresa
-		return false;
+	constructor() {
+		super();
+		this.state = {
+			usuario: {},
+			empresa: {},
+			primeiroAcesso: false
+		};
+	}
+
+	componentWillMount() {
+		const requestInfo = {
+			headers: new Headers({
+				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
+			})
+		};
+
+		fetch('http://localhost:8080/api/usuarios', requestInfo)
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Não foi possível acessar os dados do sistema.');
+				}
+			})
+			.then(usuario => this.setState({usuario}));
+
+		fetch('http://localhost:8080/api/empresas', requestInfo)
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Não foi possível acessar os dados do sistema.');
+				}
+			})
+			.then(empresa => {
+				this.setState({empresa});
+				if (empresa.length < 1) {
+					this.setState({primeiroAcesso: true});
+				}
+			});
 	}
 
 	render() {
 		return(
 			<div id="root">
-				{this.primeiroAcesso() &&
-					<div id="main" className="main">
-						<p>Desculpe, ainda não tenho nada para exibir nesta página. :(</p>
-					</div>
+				<Header usuario={this.state.usuario} />			
+				{this.state.primeiroAcesso &&				
+					<ModalEmpresa mostra={this.state.primeiroAcesso}/>
 				}
-				<Header />
-			</div>
+				</div>
 		);
 	}
 }

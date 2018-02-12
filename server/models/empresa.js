@@ -1,9 +1,16 @@
 export default (sequelize, DataType) => {
-	const empresa = sequelize.define('empresa', {
+	const Empresa = sequelize.define('empresa', {
 		id: {
 	  		type: DataType.INTEGER,
 	  		primaryKey: true,
 	  		autoIncrement: true,
+		},
+		cnpj: {
+			type: DataType.STRING,
+			allowNull: false,
+			validate: {
+				notEmpty: true
+			}
 		},
 		nome: {
 	  		type: DataType.STRING,
@@ -12,21 +19,35 @@ export default (sequelize, DataType) => {
 				notEmpty: true,
 	  		},
 		},
-		nomefantasia: {
+		data: {
+			type: DataType.DATE,
+			allowNull: false,
+			validate: {
+				notEmpty: true
+			}
+		},
+		cep: {
+			type: DataType.STRING,
+	  		allowNull: false,
+	  		validate: {
+				notEmpty: true
+	  		},
+		},
+		atividade: {
 			type: DataType.STRING,
 	  		allowNull: false,
 	  		validate: {
 				notEmpty: true,
 	  		},
 		},
-		cnpj: {
-			type: DataType.STRING,
-			allowNull: false,
-			validate: {
-				notEmpty: true,
-				len: [17, 17]
-			}
+		usuarioId: {
+			type: DataType.INTEGER,
 		}
-  	});
-  	return empresa;
+	});
+
+	Empresa.associate = models => {
+		Usuario.belongsTo(models.Usuario);
+	};
+
+  	return Empresa;
 };

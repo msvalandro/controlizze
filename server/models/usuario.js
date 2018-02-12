@@ -1,13 +1,20 @@
 import bcrypt from 'bcrypt-nodejs';
 
 export default (sequelize, DataType) => {
-	const usuario = sequelize.define('usuario', {
+	const Usuario = sequelize.define('usuario', {
 		id: {
 			type: DataType.INTEGER,
 			primaryKey: true,
 			autoIncrement: true,
 		},
-		nome: {
+		primeiroNome: {
+			type: DataType.STRING,
+			allowNull: false,
+			validate: {
+				notEmpty: true,
+			}
+		},
+		sobreNome: {
 			type: DataType.STRING,
 			allowNull: false,
 			validate: {
@@ -37,6 +44,13 @@ export default (sequelize, DataType) => {
 			}
 		}
 	});
-	usuario.isPassword = (encodedPassword, password) => bcrypt.compareSync(password, encodedPassword)	;
-	return usuario;
+
+	Usuario.associate = models => {
+		Usuario.hasMany(models.Empresa, {
+			foreignKey: 'usuarioId'
+		});
+	};
+
+	Usuario.isPassword = (encodedPassword, password) => bcrypt.compareSync(password, encodedPassword)	;
+	return Usuario;
 }

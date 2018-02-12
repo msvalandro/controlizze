@@ -7,13 +7,7 @@ module.exports = app => {
 	const { usuario } = app.database.models;
 	
 	api.lista = (req, res) => {
-		usuario.findAll({})
-			.then(result => res.json(result))
-			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
-	};
-	
-	api.buscaPorId = (req, res) => {
-		usuario.findOne({ where: req.params })
+		usuario.findOne({ where: req.user.id })
 			.then(result => res.json(result))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};
@@ -29,8 +23,7 @@ module.exports = app => {
 					});
 					const payload = {id: usuario.id};
 					res.json({
-						token: jwt.sign(payload, config.jwtSecret, {expiresIn: 84600}),
-						nome: usuario.nome
+						token: jwt.sign(payload, config.jwtSecret, {expiresIn: 84600})
 					});
 				} else {
 					res.json('Já existe uma conta utilizando este e-mail.');
@@ -40,13 +33,13 @@ module.exports = app => {
 	};
 	
 	api.atualiza = (req, res) => {
-		usuario.update(req.body, { where: req.params })
+		usuario.update(req.body, { where: req.user.id })
 			.then(result => res.json(result))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};
 	
 	api.deleta = (req, res) => {
-		usuario.destroy({ where: req.params })
+		usuario.destroy({ where: req.user.id })
 			.then(() => res.sendStatus(HttpStatus.NO_CONTENT))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Notificacao from './utils/Notificacao';
-import InputCustomizado from './utils/InputCustomizado';
-import InputSubmitCustomizado from './utils/InputSubmitCustomizado';
+import InputCustomizado, { SubmitCustomizado } from './utils/CampoCustomizado';
 import '../assets/css/cadastro-usuario.css';
 
 class CadastroUsuario extends Component {
@@ -23,7 +22,7 @@ class CadastroUsuario extends Component {
 
 		const requestInfo = {
 			method: 'POST',
-			body: JSON.stringify({nome: this.nome.value, email: this.email.value, senha: this.senha.value}),
+			body: JSON.stringify({primeiroNome: this.primeiroNome.value, sobreNome: this.sobreNome.value, email: this.email.value, senha: this.senha.value}),
 			headers: new Headers({
 				'Content-type': 'application/json'
 			})
@@ -40,7 +39,6 @@ class CadastroUsuario extends Component {
 			.then(result => {
 				if (result.token) {
 					localStorage.setItem('auth-token', result.token);
-					localStorage.setItem('user-name', result.nome);					
 					this.props.history.push('/');
 				} else {
 					this.setState({msg: result});					
@@ -54,23 +52,28 @@ class CadastroUsuario extends Component {
 	render() {
 		return(
 			<div className="cadastro-usuario-tela">
-				<Notificacao texto={this.state.msg} />
+				<Notificacao tipoAlerta="danger" texto={this.state.msg} />
 				<div className="container card cadastro-usuario-form col-md-6">
 					<h2 className="text-center">Cadastro de Usuário</h2>
 					<form onSubmit={this.envia.bind(this)}>
-						<InputCustomizado htmlFor="nome" titulo="Nome"
-							tipo="text" id="nome" required="true" referencia={(input) => this.nome = input}
-							placeholder="Informe o seu nome aqui..." />
+						<div className="row">
+							<InputCustomizado htmlFor="primeiro-nome" titulo="Primeiro nome" className="col-md-6"
+								tipo="text" id="primeiro-nome" required="true" referencia={(input) => this.primeiroNome = input}
+								placeholder="Informe o seu primeiro nome aqui..." />
+							<InputCustomizado htmlFor="sobrenome" titulo="Sobrenome" className="col-md-6"
+								tipo="text" id="nome" required="true" referencia={(input) => this.sobreNome = input}
+								placeholder="Informe o seu sobrenome aqui..." />
+						</div>
 						<InputCustomizado htmlFor="email" titulo="E-mail"
 							tipo="email" id="email" required="true" referencia={(input) => this.email = input}
 							placeholder="Informe o seu e-mail aqui..." />
 						<InputCustomizado htmlFor="senha" titulo="Senha"
 							tipo="password" id="senha" required="true" referencia={(input) => this.senha = input}
 							placeholder="Informe a sua senha aqui..." />
-						<InputCustomizado htmlFor="senha-confirma" titulo="Senha"
+						<InputCustomizado htmlFor="senha-confirma" titulo="Confirme a senha"
 							tipo="password" id="senha-confirma" required="true" referencia={(input) => this.senhaConfirma = input}
 							placeholder="Confirme a sua senha aqui..." />
-						<InputSubmitCustomizado tipo="submit" 
+						<SubmitCustomizado tipo="submit" 
 							className="btn btn-black btn-lg btn-block" titulo="Criar Conta" />
 					</form>
 				</div>

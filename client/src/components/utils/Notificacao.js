@@ -8,7 +8,7 @@ export default class Notificacao extends Component {
 		return(
 			<div className="container">
 				{texto.length > 0 &&				
-					<div className="alert alert-danger" role="alert">
+					<div className={'alert alert-' + this.props.tipoAlerta} role="alert">
 						{this.props.texto}
 					</div>
 				}				

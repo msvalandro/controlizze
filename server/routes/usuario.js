@@ -5,11 +5,7 @@ module.exports = (app) => {
 		.post(api.adiciona);
 
 	app.route('/api/usuarios')
-		.get(api.lista);
-  
-	app.route('/api/usuarios/:id')
-		.get(api.buscaPorId)
+		.get(api.lista)
 		.put(api.atualiza)
 		.delete(api.deleta);
   };
-  

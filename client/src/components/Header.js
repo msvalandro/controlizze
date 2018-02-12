@@ -20,24 +20,24 @@ export default class Header extends Component {
 							<Link className="nav-link" to={'/'}>Home <span className="sr-only">(current)</span></Link>
 						</li>
 						<li className="nav-item">
-							<Link className="nav-link" to={'/'}>Outro Componente</Link>
+							<Link className="nav-link" to={'/'}>Lançamentos</Link>
 						</li>
 					</ul>
 
-					<span>Olá, {localStorage.getItem('user-name')}</span>
+					<span>Olá, {this.props.usuario.primeiroNome}</span>
 
 					<ul className="navbar-nav">					
-						<li class="nav-item dropdown">
+						<li className="nav-item dropdown">
 							<Link className="nav-link dropdown-toggle" to={''} id="perfil-dropdown" 
 								role="button" data-toggle="dropdown" 
 								aria-haspopup="true" aria-expanded="false">
 								<i className="far fa-user fa-lg" style={{marginLeft: '20px'}}></i>
 							</Link>
 							<div className="dropdown-menu dropdown-menu-right" aria-labelledby="perfil-dropdown">
-								<a className="dropdown-item" href="#">Meu perfil</a>
-								<a className="dropdown-item" href="#">Another action</a>
+								<Link className="dropdown-item" to={'/'}>Meu perfil</Link>
+								<Link className="dropdown-item" to={'/'}>Minha empresa</Link>
 								<div className="dropdown-divider"></div>
-								<a className="dropdown-item" href="#">Sair</a>
+								<Link className="dropdown-item" to={'/logout'}>Sair</Link>
 							</div>
 						</li>
 					</ul>

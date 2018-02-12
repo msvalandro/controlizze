@@ -28,9 +28,9 @@ html, body {
     height: 385px;
     padding: 40px 40px;
     
-    position:absolute; /*it can be fixed too*/
+    position: relative; /*it can be fixed too*/
     left:0; right:0;
-    top:0; bottom:100px;
+    top:100px; bottom:100px;
     margin:auto;
 
     /*this to solve "the content will not be cut when the window is smaller than the content": */
