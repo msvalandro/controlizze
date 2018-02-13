@@ -41,6 +41,12 @@ export default (sequelize, DataType) => {
 			beforeCreate: user => {
 				const salt = bcrypt.genSaltSync();
 				user.set('senha', bcrypt.hashSync(user.senha, salt));
+			},
+			beforeUpdate: user => {
+				if (user._changed.senha) {
+					const salt = bcrypt.genSaltSync();
+					user.set('senha', bcrypt.hashSync(user.senha, salt));
+				}
 			}
 		}
 	});

@@ -9,6 +9,7 @@ import App from './App';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import CadastroUsuario from './components/CadastroUsuario';
+import Perfil from './components/Perfil';
 import registerServiceWorker from './registerServiceWorker';
 
 function verificaAutenticacao(component) {
@@ -27,6 +28,8 @@ ReactDOM.render(
 				localStorage.getItem('auth-token') === null ? <Login {...props} /> : <Redirect to="/" />} />
 			<Route path="/logout" component={Logout} />
 			<Route path="/usuario/novo" component={CadastroUsuario} />
+			<Route path="/perfil" render={props => (verificaAutenticacao(<App {...props} children={<Perfil {...props}/>} />))} />
+			<Route path="/empresa" />			
 			<Route path="/*" render={() => (<Redirect to={'/'}/>)} />				
 		</Switch>
 	</Router>)

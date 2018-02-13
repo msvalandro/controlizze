@@ -1,3 +1,10 @@
 .navbar {
     color: #fff;
 }
+
+
+
+.dropdown-item:active {
+    background-color: rgba(223, 223, 223, 0.685);
+    color: #212529;
+}

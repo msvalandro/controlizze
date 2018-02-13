@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
 
+export class CheckBoxCustomizado extends Component {
+
+	render() {
+		return(
+			<div className="form-check">
+				<input type="checkbox" className="form-check-input" id={this.props.id} />
+    			<label className="form-check-label" htmlFor={this.props.htmlFor}>{this.props.titulo}</label>
+			</div>
+		);
+	}
+}
+
 export class TextAreaCustomizado extends Component {
 
 	render() {
@@ -19,9 +31,7 @@ export class SubmitCustomizado extends Component {
 
 	render() {
 		return(
-			<div className="form-group">
-				<button type={this.props.tipo} className={this.props.className}>{this.props.titulo}</button>
-			</div>
+			<button onClick={this.props.acao} style={this.props.estilo} type={this.props.tipo} className={this.props.className} value={this.props.valor}>{this.props.titulo}</button>
 		);
 	}
 }

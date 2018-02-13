@@ -37,7 +37,7 @@ class Login extends Component {
 				this.props.history.push('/');
 			})
 			.catch(error => {
-				this.setState({msg: 'Usuário ou senha inválidos.'})
+				this.setState({msg: 'Usuário ou senha inválidos.'});
 			});
 	}
 

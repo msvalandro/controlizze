@@ -33,13 +33,22 @@ module.exports = app => {
 	};
 	
 	api.atualiza = (req, res) => {
-		usuario.update(req.body, { where: req.user.id })
+		let user = {};
+		user.primeiroNome = req.body.primeiroNome;
+		user.sobreNome = req.body.sobreNome;
+		user.email = req.body.email;	
+
+		if(req.body.flagSenha) {
+			user.senha = req.body.senha;
+		}
+
+		usuario.update(user, { individualHooks: true, where: req.user })
 			.then(result => res.json(result))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};
 	
 	api.deleta = (req, res) => {
-		usuario.destroy({ where: req.user.id })
+		usuario.destroy({ where: req.user })
 			.then(() => res.sendStatus(HttpStatus.NO_CONTENT))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};

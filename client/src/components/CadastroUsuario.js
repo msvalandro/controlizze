@@ -16,7 +16,7 @@ class CadastroUsuario extends Component {
 		event.preventDefault();
 
 		if (this.senha.value !== this.senhaConfirma.value) {
-			this.setState({msg: 'As senhas digitadas não conferem.'});			
+			this.setState({msg: 'As senhas digitadas não conferem.'});	
 			return;
 		}
 
@@ -41,7 +41,7 @@ class CadastroUsuario extends Component {
 					localStorage.setItem('auth-token', result.token);
 					this.props.history.push('/');
 				} else {
-					this.setState({msg: result});					
+					this.setState({msg: result});
 				}
 			})
 			.catch(error => {
@@ -73,8 +73,10 @@ class CadastroUsuario extends Component {
 						<InputCustomizado htmlFor="senha-confirma" titulo="Confirme a senha"
 							tipo="password" id="senha-confirma" required="true" referencia={(input) => this.senhaConfirma = input}
 							placeholder="Confirme a sua senha aqui..." />
-						<SubmitCustomizado tipo="submit" 
-							className="btn btn-black btn-lg btn-block" titulo="Criar Conta" />
+						<div className="form-group">
+							<SubmitCustomizado tipo="submit" 
+								className="btn btn-black btn-lg btn-block" titulo="Criar Conta" />
+						</div>
 					</form>
 				</div>
 			</div>

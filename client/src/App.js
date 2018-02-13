@@ -53,6 +53,7 @@ class App extends Component {
 				{this.state.primeiroAcesso &&				
 					<ModalEmpresa mostra={this.state.primeiroAcesso}/>
 				}
+				{this.props.children}
 				</div>
 		);
 	}

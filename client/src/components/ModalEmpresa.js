@@ -73,6 +73,10 @@ export default class ModalEmpresa extends Component {
 					msg: 'Empresa cadastrada com sucesso.',
 					tipoAlerta: 'success'
 				});
+				$('#notificacao').show();
+				setTimeout(() => {
+					$('#notificacao').fadeOut(1000);						
+				}, 2000);
 			})
 			.catch(error => console.log(error));
 	}

@@ -34,8 +34,8 @@ export default class Header extends Component {
 								<i className="far fa-user fa-lg" style={{marginLeft: '20px'}}></i>
 							</Link>
 							<div className="dropdown-menu dropdown-menu-right" aria-labelledby="perfil-dropdown">
-								<Link className="dropdown-item" to={'/'}>Meu perfil</Link>
-								<Link className="dropdown-item" to={'/'}>Minha empresa</Link>
+								<Link className="dropdown-item" to={'/perfil'}>Meu perfil</Link>
+								<Link className="dropdown-item" to={'/empresa'}>Minha empresa</Link>
 								<div className="dropdown-divider"></div>
 								<Link className="dropdown-item" to={'/logout'}>Sair</Link>
 							</div>
