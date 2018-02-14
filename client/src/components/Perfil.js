@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import swal from 'sweetalert2';
 import PubSub from 'pubsub-js';
-import TratadorErros from './TratadorErros';
+import TratadorErros from './utils/TratadorErros';
 import Notificacao from './utils/Notificacao';
 import InputCustomizado, { CheckBoxCustomizado, SubmitCustomizado } from './utils/CampoCustomizado';
 
@@ -51,6 +51,7 @@ export default class Perfil extends Component {
 			flagSenha = true;
 			if (this.senha.value !== this.senhaConfirma.value) {
 				this.setState({msg: 'As senhas digitadas não conferem.', tipoAlerta: 'danger'});
+				$('#notificacao-perfil').show();
 				return;
 			}
 		} else {
@@ -76,7 +77,7 @@ export default class Perfil extends Component {
 					new TratadorErros().publicaErros(response.json());
 				} else {
 					this.setState({msg: 'Falha ao alterar os dados no sistema.', tipoAlerta: 'danger'});
-					throw new Error('Não foi possível cadastrar a empresa no sistema.');
+					throw new Error('Não foi possível cadastrar o usuário no sistema.');
 				}
 			})
 			.then(result => {
@@ -124,7 +125,7 @@ export default class Perfil extends Component {
 							if (response.ok) {
 								this.props.history.push('/logout');							
 							} else {
-								throw new Error('Não foi possível cadastrar a empresa no sistema.');
+								throw new Error('Não foi possível deletar o usuário do sistema.');
 							}
 						})
 						.catch(error => console.log('Ocorreu um erro ao excluir o cadastro do sistema.'));

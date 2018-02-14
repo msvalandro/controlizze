@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PubSub from 'pubsub-js';
+import TratadorErros from './utils/TratadorErros';
 import Notificacao from './utils/Notificacao';
 import InputCustomizado, { SubmitCustomizado } from './utils/CampoCustomizado';
 import '../assets/css/cadastro-usuario.css';
@@ -8,7 +10,8 @@ class CadastroUsuario extends Component {
 	constructor() {
 		super();
 		this.state = {
-			msg: ''
+			msg: '',
+			tipoAlerta: 'danger'
 		}
 	}
 
@@ -30,9 +33,13 @@ class CadastroUsuario extends Component {
 
 		fetch('http://localhost:8080/usuarios', requestInfo)
 			.then(response => {
+				PubSub.publish('limpa-erros', {});
 				if (response.ok) {
 					return response.json();
+				} else if (response.status === 400) {
+					new TratadorErros().publicaErros(response.json());
 				} else {
+					this.setState({msg: 'Ocorreu um erro ao realizar o cadastro no sistema.', tipoAlerta: 'danger'});
 					throw new Error('Não foi possível cadastrar o usuário no sistema.');
 				}
 			})
@@ -44,9 +51,7 @@ class CadastroUsuario extends Component {
 					this.setState({msg: result});
 				}
 			})
-			.catch(error => {
-				this.setState({msg: 'Ocorreu um erro ao realizar o cadastro no sistema.'});
-			});
+			.catch(error => console.log(error));
 	}
 
 	render() {
@@ -58,20 +63,25 @@ class CadastroUsuario extends Component {
 					<form onSubmit={this.envia.bind(this)}>
 						<div className="row">
 							<InputCustomizado htmlFor="primeiro-nome" titulo="Primeiro nome" className="col-md-6"
-								tipo="text" id="primeiro-nome" required="true" referencia={(input) => this.primeiroNome = input}
+								tipo="text" id="primeiro-nome" required="true" nome="primeiroNome"
+								referencia={(input) => this.primeiroNome = input}
 								placeholder="Informe o seu primeiro nome aqui..." />
 							<InputCustomizado htmlFor="sobrenome" titulo="Sobrenome" className="col-md-6"
-								tipo="text" id="nome" required="true" referencia={(input) => this.sobreNome = input}
+								tipo="text" id="nome" required="true" nome="sobreNome"
+								referencia={(input) => this.sobreNome = input}
 								placeholder="Informe o seu sobrenome aqui..." />
 						</div>
 						<InputCustomizado htmlFor="email" titulo="E-mail"
-							tipo="email" id="email" required="true" referencia={(input) => this.email = input}
+							tipo="email" id="email" required="true" nome="email"
+							referencia={(input) => this.email = input}
 							placeholder="Informe o seu e-mail aqui..." />
 						<InputCustomizado htmlFor="senha" titulo="Senha"
-							tipo="password" id="senha" required="true" referencia={(input) => this.senha = input}
+							tipo="password" id="senha" required="true" nome="senha" 
+							referencia={(input) => this.senha = input}
 							placeholder="Informe a sua senha aqui..." />
 						<InputCustomizado htmlFor="senha-confirma" titulo="Confirme a senha"
-							tipo="password" id="senha-confirma" required="true" referencia={(input) => this.senhaConfirma = input}
+							tipo="password" id="senha-confirma" required="true" nome="senha" 
+							referencia={(input) => this.senhaConfirma = input}
 							placeholder="Confirme a sua senha aqui..." />
 						<div className="form-group">
 							<SubmitCustomizado tipo="submit" 

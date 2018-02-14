@@ -3,7 +3,7 @@ import swal from 'sweetalert2';
 import $ from 'jquery';
 import mask from 'jquery-mask-plugin';
 import PubSub from 'pubsub-js';
-import TratadorErros from './TratadorErros';
+import TratadorErros from './utils/TratadorErros';
 import Notificacao from './utils/Notificacao';
 import InputCustomizado, { TextAreaCustomizado } from './utils/CampoCustomizado';
 import '../assets/css/modal.css';
@@ -19,6 +19,16 @@ export default class ModalEmpresa extends Component {
 	}
 
 	componentDidMount() {
+		this.mostraModal();
+	}
+
+	componentWillReceiveProps() {
+		if (this.props.mostra) {
+			this.mostraModal();
+		}
+	}
+
+	mostraModal() {
 		swal({
 			title: 'Aviso!',
 			text: 'Você precisa cadastrar a sua empresa antes de começar a usar o sistema. Clique no botão OK para continuar.',
@@ -30,16 +40,16 @@ export default class ModalEmpresa extends Component {
 		});
 
 		// mascara de CNPJ
-		$("#cnpj").mask('00.000.000/0000-00', {
+		$("#cnpj-modal").mask('00.000.000/0000-00', {
 			placeholder: '__.___.___/____-__'
 		});
 
 		// mascara de data
-		$("#data").mask('00/00/0000', {
+		$("#data-modal").mask('00/00/0000', {
 			placeholder: '__/__/____'
 		});
 
-		$("#cep").mask('00.000-000', {
+		$("#cep-modal").mask('00.000-000', {
 			placeholder: '__.___-___'
 		});
 	}
@@ -75,9 +85,9 @@ export default class ModalEmpresa extends Component {
 						msg: 'Empresa cadastrada com sucesso.',
 						tipoAlerta: 'success'
 					});
-					$('#notificacao-empresa').show();
+					$('#notificacao-modal-empresa').show();
 					setTimeout(() => {
-						$('#notificacao-empresa').fadeOut(1000);
+						$('#notificacao-modal-empresa').fadeOut(1000);
 					}, 2000);
 				}
 			})
@@ -87,7 +97,7 @@ export default class ModalEmpresa extends Component {
 	render() {
 		return(
 			<div>
-				<Notificacao id="notificacao-empresa" tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />				
+				<Notificacao id="notificacao-modal-empresa" tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />				
 				<div id="modal-empresa" className="modal" role="dialog">
 					<div className="modal-dialog modal-lg" role="document">
 						<div className="modal-content">
@@ -96,21 +106,20 @@ export default class ModalEmpresa extends Component {
 							</div>
 							<div className="modal-body">
 								<form>
-									<InputCustomizado htmlFor="cnpj" titulo="CNPJ"
-										tipo="text" id="cnpj" required="true" nome="cnpj"
+									<InputCustomizado htmlFor="cnpj-modal" titulo="CNPJ"
+										tipo="text" id="cnpj-modal" required="true" nome="cnpj"
 										referencia={(input) => this.cnpj = input}
 										placeholder="Informe o CNPJ da empresa aqui..." />
-									<span>{this.state.msg}</span>
 									<InputCustomizado htmlFor="nome" titulo="Nome"
 										tipo="text" id="nome" required="true" nome="nome"
 										referencia={(input) => this.nome = input}
 										placeholder="Informe o nome da empresa aqui..." />
-									<InputCustomizado htmlFor="data" titulo="Data de Adesão"
-										tipo="text" id="data" required="true" nome="data"
+									<InputCustomizado htmlFor="data-modal" titulo="Data de Adesão"
+										tipo="text" id="data-modal" required="true" nome="data"
 										referencia={(input) => this.data = input}
 										placeholder="Informe a data de adesão ao MEI aqui..." />
-									<InputCustomizado htmlFor="cep" titulo="CEP"
-										tipo="text" id="cep" required="true" nome="cep"
+									<InputCustomizado htmlFor="cep-modal" titulo="CEP"
+										tipo="text" id="cep-modal" required="true" nome="cep"
 										referencia={(input) => this.cep = input}
 										placeholder="Informe o CEP da empresa aqui..." />
 									<TextAreaCustomizado htmlFor="atividade" titulo="Atividade"

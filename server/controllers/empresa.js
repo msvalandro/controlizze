@@ -32,7 +32,7 @@ module.exports = (app) => {
 	}
 
 	api.lista = (req, res) => {
-		empresa.findAll({ where: {usuarioId: req.user.id} })
+		empresa.findOne({ where: {usuarioId: req.user.id} })
 			.then(result => res.json(result))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};
@@ -61,13 +61,24 @@ module.exports = (app) => {
 	};
 
 	api.atualiza = (req, res) => {
-		empresa.update(req.body, { where: req.params })
+		let dados = req.body;
+		let errors = validaDados(dados);
+
+		if (errors.length > 0) {
+			res.status(HttpStatus.BAD_REQUEST).json(errors);
+			return;
+		}
+
+		dados.data = new Date(req.body.data);
+		dados.usuarioId = req.user.id;
+
+		empresa.update(req.body, { where: {usuarioId: req.user.id} })
 			.then(result => res.json(result))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};
 
 	api.deleta = (req, res) => {
-		empresa.destroy({ where: req.params })
+		empresa.destroy({ where: {usuarioId: req.user.id} })
 			.then(() => res.sendStatus(HttpStatus.NO_CONTENT))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};

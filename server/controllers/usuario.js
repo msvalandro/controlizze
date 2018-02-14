@@ -23,7 +23,9 @@ module.exports = app => {
 			errors.push({field: 'email', message: 'Você deve informar um e-mail.'});
 		}
 
-		if (dados.senha && dados.senha.length < 6) { 
+
+
+		if (typeof dados.senha != 'undefined' && dados.senha.length < 6) { 
 			errors.push({field: 'senha', message: 'A senha deve ter no mínimo 6 dígitos.'});
 		}
 
@@ -73,6 +75,8 @@ module.exports = app => {
 			user.senha = req.body.senha;
 		}
 
+		console.log(user);
+
 		let errors = validaDados(user);		
 
 		if (errors.length > 0) {
@@ -82,7 +86,6 @@ module.exports = app => {
 
 		usuario.findOne({where: {email: user.email, id: {[Op.ne]: req.user.id}}})
 			.then(result => {
-				console.log(result);
 				if (!result) {
 					usuario.update(user, { individualHooks: true, where: req.user })
 						.then(result => res.json(result))
