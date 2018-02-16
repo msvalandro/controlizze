@@ -30,6 +30,21 @@ class App extends Component {
 			})
 			.then(usuario => this.setState({usuario}));
 
+		this.requestEmpresa();
+	}
+
+	componentWillReceiveProps() {
+		this.setState({primeiroAcesso: false});
+		this.requestEmpresa();
+	}
+
+	requestEmpresa() {
+		const requestInfo = {
+			headers: new Headers({
+				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
+			})
+		};
+
 		fetch('http://localhost:8080/api/empresas', requestInfo)
 			.then(response => {
 				if (response.ok) {
@@ -40,7 +55,7 @@ class App extends Component {
 			})
 			.then(empresa => {
 				this.setState({empresa});
-				if (empresa.length < 1) {
+				if (!empresa) {
 					this.setState({primeiroAcesso: true});
 				}
 			});

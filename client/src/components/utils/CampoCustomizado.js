@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PubSub from 'pubsub-js';
 
 export class CheckBoxCustomizado extends Component {
 
@@ -14,6 +15,28 @@ export class CheckBoxCustomizado extends Component {
 
 export class TextAreaCustomizado extends Component {
 
+	constructor() {
+		super();
+		this.state = {msgErro: ''};
+	}
+
+	componentDidMount() {
+		PubSub.subscribe('erro-validacao', (topico, erro) => {
+			if (erro.field === this.props.nome) {
+				this.setState({msgErro: erro.message});	
+			}
+		});
+
+		PubSub.subscribe('limpa-erros', topico => {
+			this.setState({msgErro: ''});
+		});
+	}
+
+	componentWillUnmount() {
+		PubSub.unsubscribe('erro-validacao');
+		PubSub.unsubscribe('limpa-erros');
+	}
+
 	render() {
 		return(
 			<div className="form-group">
@@ -22,6 +45,7 @@ export class TextAreaCustomizado extends Component {
 					ref={this.props.referencia}
 					rows={this.props.linha} cols={this.props.coluna} 
 					className="form-control" placeholder={this.props.placeholder}></textarea>
+				<span className="error">{this.state.msgErro}</span>				
 			</div>
 		);
 	}
@@ -38,12 +62,36 @@ export class SubmitCustomizado extends Component {
 
 export default class InputCustomizado extends Component {
 
+	constructor() {
+		super();
+		this.state = {msgErro: ''};
+	}
+
+	componentDidMount() {
+		PubSub.subscribe('erro-validacao', (topico, erro) => {
+			if (erro.field === this.props.nome) {
+				this.setState({msgErro: erro.message});	
+			}
+		});
+
+		PubSub.subscribe('limpa-erros', topico => {
+			this.setState({msgErro: ''});
+		});
+	}
+
+	componentWillUnmount() {
+		PubSub.unsubscribe('erro-validacao');
+		PubSub.unsubscribe('limpa-erros');
+	}
+
 	render() {
 		return(
 			<div className={'form-group ' + this.props.className}>
 				<label htmlFor={this.props.htmlFor}>{this.props.titulo}</label>
-				<input type={this.props.tipo} className="form-control" id={this.props.id} required={this.props.required}
+				<input type={this.props.tipo} className="form-control" id={this.props.id} 
+					required={this.props.required} name={this.props.nome}
 					ref={this.props.referencia} placeholder={this.props.placeholder} />
+				<span className="error">{this.state.msgErro}</span>
 			</div>
 		);
 	}
