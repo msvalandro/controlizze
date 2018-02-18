@@ -1,4 +1,5 @@
 export default (sequelize, DataType) => {
+
 	const Empresa = sequelize.define('empresa', {
 		id: {
 	  		type: DataType.INTEGER,
@@ -42,11 +43,16 @@ export default (sequelize, DataType) => {
 		},
 		usuarioId: {
 			type: DataType.INTEGER,
+			allowNull: false, 
+			validate: {
+				notEmpty: true
+			}
 		}
 	});
 
 	Empresa.associate = models => {
-		Usuario.belongsTo(models.Usuario);
+		const empresa = models.empresa;
+		empresa.belongsTo(models.usuario);
 	};
 
   	return Empresa;

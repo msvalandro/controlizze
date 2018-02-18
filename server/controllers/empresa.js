@@ -16,7 +16,7 @@ module.exports = (app) => {
 			errors.push({field: 'nome', message: 'O nome da empresa deve conter pelo menos 6 caracteres.'});
 		}
 
-		if (dados.data.length < 10) { 
+		if (!(dados.data instanceof Date && !isNaN(dados.data.valueOf()))) { 
 			errors.push({field: 'data', message: 'A data deve estar no formato dd/mm/yyyy.'});
 		}
 
@@ -29,6 +29,11 @@ module.exports = (app) => {
 		}
 
 		return errors;
+	}
+
+	const formataData = data => {
+		let	date = data.split('/');
+		return new Date(date[2], date[1] - 1, date[0]);		
 	}
 
 	api.lista = (req, res) => {
@@ -45,6 +50,9 @@ module.exports = (app) => {
 
 	api.adiciona = (req, res) => {
 		let dados = req.body;
+		dados.data = formataData(dados.data);
+		// console.log(formataData(dados.data));
+		// console.log((formataData(dados.data) instanceof Date && !isNaN(formataData(dados.data).valueOf())));
 		let errors = validaDados(dados);
 
 		if (errors.length > 0) {
@@ -52,7 +60,6 @@ module.exports = (app) => {
 			return;
 		}
 
-		dados.data = new Date(req.body.data);
 		dados.usuarioId = req.user.id;
 
 		empresa.create(dados)

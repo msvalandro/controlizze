@@ -30,9 +30,9 @@ export default (app) => {
 		models: {},
 		};
 		database.models = loadModels(sequelize);
-		Object.keys(database).forEach((modelName) => {
-			if ('associate' in database[modelName]) {
-				database[modelName].associate(database);
+		Object.keys(database.models).forEach((modelName) => {
+			if ('associate' in database.models[modelName]) {
+				database.models[modelName].associate(database.models);
 			}
 		});
 		sequelize.sync().done(() => database);
