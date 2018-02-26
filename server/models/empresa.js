@@ -52,7 +52,9 @@ export default (sequelize, DataType) => {
 
 	Empresa.associate = models => {
 		const empresa = models.empresa;
-		empresa.belongsTo(models.usuario);
+		empresa.belongsTo(models.usuario, {
+			onDelete: 'cascade'
+		});
 	};
 
   	return Empresa;

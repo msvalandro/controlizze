@@ -21,6 +21,8 @@ class CadastroUsuario extends Component {
 		if (this.senha.value !== this.senhaConfirma.value) {
 			this.setState({msg: 'As senhas digitadas não conferem.'});	
 			return;
+		} else {
+			this.setState({msg: ''});
 		}
 
 		const requestInfo = {
@@ -44,11 +46,13 @@ class CadastroUsuario extends Component {
 				}
 			})
 			.then(result => {
-				if (result.token) {
-					localStorage.setItem('auth-token', result.token);
-					this.props.history.push('/');
-				} else {
-					this.setState({msg: result});
+				if (result) {
+					if (result.token) {
+						localStorage.setItem('auth-token', result.token);
+						this.props.history.push('/');
+					} else {
+						this.setState({msg: result});
+					}
 				}
 			})
 			.catch(error => console.log(error));
