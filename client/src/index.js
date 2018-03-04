@@ -5,12 +5,14 @@ import './assets/css/reset.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.min.js';
 import '../src/assets/css/fontawesome-all.min.css';
+import '../src/assets/css/main.css';
 import App from './App';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import CadastroUsuario from './components/CadastroUsuario';
 import Perfil from './components/Perfil';
 import Empresa from './components/Empresa';
+import Lancamento from './components/Lancamento';
 import registerServiceWorker from './registerServiceWorker';
 
 function verificaAutenticacao(component) {
@@ -30,6 +32,7 @@ ReactDOM.render(
 			<Route path="/logout" component={Logout} />
 			<Route path="/usuario/novo" component={CadastroUsuario} />
 			<Route path="/perfil" render={props => (verificaAutenticacao(<App {...props} children={<Perfil {...props}/>} />))} />
+			<Route path="/lancamento" render={props => (verificaAutenticacao(<App {...props} children={<Lancamento {...props}/>} />))} />			
 			<Route path="/empresa" render={props => (verificaAutenticacao(<App {...props} children={<Empresa {...props}/>} />))} />			
 			<Route path="/*" render={() => (<Redirect to={'/'}/>)} />				
 		</Switch>

@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import PubSub from 'pubsub-js';
 
+export class RadioCustomizado extends Component {
+
+	render() {
+		return(
+			<div className={this.props.classe + " form-check"}>
+				<input className="form-check-input" type="radio" name={this.props.nome} 
+					id={this.props.id} value={this.props.valor} required={this.props.required} />
+				<label className="form-check-label" htmlFor={this.props.id}>{this.props.titulo}</label>
+			</div>
+		);
+	}
+}
+
 export class CheckBoxCustomizado extends Component {
 
 	render() {

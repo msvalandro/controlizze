@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import $ from 'jquery';
 import '../assets/css/header.css';
 
 export default class Header extends Component {
+
+	componentDidMount() {
+		$('#items-header li').click(function() {
+			$('#items-header li').removeClass('active');
+
+			if (!$(this).hasClass('active')) {
+				$(this).addClass('active');
+			}
+		});
+	}
 
 	render() {
 		return(
@@ -15,12 +26,12 @@ export default class Header extends Component {
 				</button>
 
 				<div className="collapse navbar-collapse" id="navbar-conteudo">
-					<ul className="navbar-nav mr-auto">
+					<ul id="items-header" className="navbar-nav mr-auto">
 						<li className="nav-item active">
 							<Link className="nav-link" to={'/'}>Home <span className="sr-only">(current)</span></Link>
 						</li>
 						<li className="nav-item">
-							<Link className="nav-link" to={'/'}>Lançamentos</Link>
+							<Link className="nav-link" to={'/lancamento'}>Lançamentos</Link>
 						</li>
 					</ul>
 
