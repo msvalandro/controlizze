@@ -55,6 +55,9 @@ export default (sequelize, DataType) => {
 		empresa.belongsTo(models.usuario, {
 			onDelete: 'cascade'
 		});
+		empresa.hasMany(models.lancamento, {
+			foreignKey: 'empresaId'
+		});
 	};
 
   	return Empresa;

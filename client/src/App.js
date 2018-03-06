@@ -55,6 +55,7 @@ class App extends Component {
 			})
 			.then(empresa => {
 				this.setState({empresa});
+				this.forceUpdate();
 				if (!empresa) {
 					this.setState({primeiroAcesso: true});
 				}
@@ -62,13 +63,17 @@ class App extends Component {
 	}
 
 	render() {
+		const { children } = this.props;
+    	let childrenWithProps = React.Children.map(children, child =>
+      		React.cloneElement(child, { empresa: this.state.empresa }));
+
 		return(
 			<div id="root">
 				<Header usuario={this.state.usuario} />			
 				{this.state.primeiroAcesso &&				
 					<ModalEmpresa mostra={this.state.primeiroAcesso}/>
 				}
-				{this.props.children}
+				{childrenWithProps}
 				</div>
 		);
 	}

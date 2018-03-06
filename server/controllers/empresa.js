@@ -32,8 +32,8 @@ module.exports = (app) => {
 	}
 
 	const formataData = data => {
-		let	date = data.split('/');
-		return new Date(date[2], date[1] - 1, date[0]);		
+        let	date = data.split('/');
+        return data.length < 10 ? 'Data inválida.' : new Date(date[2], date[1] - 1, date[0]);
 	}
 
 	api.lista = (req, res) => {
@@ -51,8 +51,6 @@ module.exports = (app) => {
 	api.adiciona = (req, res) => {
 		let dados = req.body;
 		dados.data = formataData(dados.data);
-		// console.log(formataData(dados.data));
-		// console.log((formataData(dados.data) instanceof Date && !isNaN(formataData(dados.data).valueOf())));
 		let errors = validaDados(dados);
 
 		if (errors.length > 0) {

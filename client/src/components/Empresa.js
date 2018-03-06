@@ -100,7 +100,7 @@ export default class Empresa extends Component {
 					}, 2000);
 				} else {
 					this.setState({msg: result, tipoAlerta: 'danger'});
-					$('#notificacao-empresa').show();					
+					$('#notificacao-empresa').show();
 				}
 			})
 			.catch(error => console.log(error));
