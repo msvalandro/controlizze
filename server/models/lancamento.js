@@ -21,7 +21,7 @@ export default (sequelize, DataType) => {
 			}
 		},
 		valor: {
-			type: DataType.DECIMAL,
+			type: DataType.DECIMAL(10,2),
 			allowNull: false,
 			validate: {
 				notEmpty: true

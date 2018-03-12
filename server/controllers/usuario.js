@@ -23,8 +23,6 @@ module.exports = app => {
 			errors.push({field: 'email', message: 'Você deve informar um e-mail.'});
 		}
 
-
-
 		if (typeof dados.senha != 'undefined' && dados.senha.length < 6) { 
 			errors.push({field: 'senha', message: 'A senha deve ter no mínimo 6 dígitos.'});
 		}

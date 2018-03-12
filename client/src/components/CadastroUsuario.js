@@ -27,7 +27,7 @@ class CadastroUsuario extends Component {
 
 		const requestInfo = {
 			method: 'POST',
-			body: JSON.stringify({primeiroNome: this.primeiroNome.value, sobreNome: this.sobreNome.value, email: this.email.value, senha: this.senha.value}),
+			body: JSON.stringify({primeiroNome: this.primeiroNome.input.value, sobreNome: this.sobreNome.input.value, email: this.email.input.value, senha: this.senha.input.value}),
 			headers: new Headers({
 				'Content-type': 'application/json'
 			})

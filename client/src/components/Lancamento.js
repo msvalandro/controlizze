@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import mask from 'jquery-mask-plugin';
 import PubSub from 'pubsub-js';
-import { RadioGroup, Radio } from 'react-radio-group';
-import InputCustomizado, { SelectCustomizado, CheckBoxDireitaCustomizado, SubmitCustomizado, SpanErro } from './utils/CampoCustomizado';
+import InputCustomizado, { SelectCustomizado, CheckBoxDireitaCustomizado, SubmitCustomizado, RadioCustomizado } from './utils/CampoCustomizado';
 import TratadorErros from './utils/TratadorErros';
 import Notificacao from './utils/Notificacao';
 import '../assets/css/lancamento.css';
@@ -14,12 +12,10 @@ export default class Lancamento extends Component {
 		super();
 		this.state = {
 			categorias: [], 
-			selectedValue: 0,
 			msg: '',
-			tipoAlerta: 'danger'
+			tipoAlerta: 'danger',
+			id: 0
 		};
-
-		this.handleChange = this.handleChange.bind(this);
 	}
 
 	componentWillMount() {
@@ -51,30 +47,74 @@ export default class Lancamento extends Component {
 				$('#numero-nota').attr('disabled', true);
 			}
 		});
-
-		// mascara de data
-		$('#data-lancamento').mask('00/00/0000', {
-			placeholder: '__/__/____'
-		});
 	}
 
-	handleChange(value) {
-		this.setState({selectedValue: value});
+	componentWillReceiveProps() {
+		const requestInfo = {
+			headers: new Headers({
+				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
+			})
+		};
+
+		if (this.props.location.state !== undefined && this.props.empresa.id !== undefined) {
+			fetch(`http://localhost:8080/api/lancamento/${this.props.location.state.id}/${this.props.empresa.id}`, requestInfo)
+				.then(response => {
+					if (response.ok) {
+						return response.json();
+					} else {
+						this.setState({msg: 'Ocorreu um erro ao gravar o lançamento.', tipoAlerta: 'danger'});
+						throw new Error('Não foi possível cadastrar o lançamento no sistema.');
+					}
+				})
+				.then(result => {
+					this.setState({id: result.id});
+					this.descricao.input.value = result.descricao;
+					if (result.tipolancamentoId === 1) {
+						$('#receita').prop('checked', true);
+					} else {
+						$('#despesa').prop('checked', true);
+					}
+					this.categoriLancamento.value = result.categorialancamentoId;
+					if (result.numeronf !== null) {
+						$('#check-emissaonf').click();
+						this.numeroNota.input.value = result.numeronf;
+					}
+					this.dataLancamento.input.value = this.formataData(result.data);
+					this.valorLancamento.input.value = result.valor;
+				});
+		}
+	}
+
+	formataData(date) {
+		let data = new Date(date);
+		let dia = data.getDate();
+		let mes = data.getMonth() + 1;
+		let ano = data.getFullYear();
+
+		return `${(dia > 9 ? '' : '0') + dia}/${(mes > 9 ? '' : '0') + mes}/${ano}`;
 	}
 
 	envia(event) {
 		event.preventDefault();
-
+		
 		const requestInfo = {
-			method: 'POST',
-			body: JSON.stringify({descricao: this.descricao.value, tipolancamentoId: this.state.selectedValue, 
-				categorialancamentoId: this.categoriLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.value, 
-				data: this.dataLancamento.value, valor: this.valorLancamento.value, empresaId: this.props.empresa.id}),
 			headers: new Headers({
 				'Content-Type': 'application/json',
 				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
 			})
 		};
+
+		if (this.state.id === 0) {
+			requestInfo.method = 'POST';
+			requestInfo.body = JSON.stringify({descricao: this.descricao.input.value, tipolancamentoId: this.tipoLancamento.props.selectedValue, 
+				categorialancamentoId: this.categoriLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
+				data: this.dataLancamento.input.value, valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
+		} else {
+			requestInfo.method = 'PUT';
+			requestInfo.body = JSON.stringify({id: this.state.id, descricao: this.descricao.input.value, tipolancamentoId: this.tipoLancamento.props.selectedValue, 
+				categorialancamentoId: this.categoriLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
+				data: this.dataLancamento.input.value, valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
+		}
 
 		fetch('http://localhost:8080/api/lancamentos', requestInfo)
 			.then(response => {
@@ -95,12 +135,37 @@ export default class Lancamento extends Component {
 					setTimeout(() => {
 						$('#notificacao-lancamento').fadeOut(1000);						
 					}, 2000);
-				} else {
-					this.setState({msg: 'Ocorreu um erro ao gravar o lançamento.', tipoAlerta: 'danger'});
-					$('#notificacao-lancamento').show();
+					this.limpaForm();					
 				}
 			})
 			.catch(error => console.log(error));
+	}
+
+	limpaForm() {
+		this.descricao.input.value = '';
+		if (this.emissaoNf.checked) $('#check-emissaonf').click();
+		this.dataLancamento.input.value = '';
+		this.valorLancamento.input.value = '';
+	}
+
+	trocaCategorias(value) {
+		const requestInfo = {
+			headers: new Headers({
+				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
+			})
+		};
+
+		fetch(`http://localhost:8080/api/categorias/${value}`, requestInfo)
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Não foi possível acessar os dados do sistema.');
+				}
+			})
+			.then(categorias => {
+				this.setState({categorias});
+			});
 	}
 
 	render() {
@@ -120,22 +185,17 @@ export default class Lancamento extends Component {
 						</div>
 						<div className="col-md-3">
 							<label></label>
-							<RadioGroup name="tipo-lancamento" 
-								selectedValue={this.state.selectedValue} onChange={this.handleChange} required >
-								<div>
-									<Radio id="receita" value="1" />
-									<label style={{paddingLeft: '5px', margin: 0}} htmlFor="receita"> Receita</label>
-								</div>
-								<div>
-									<Radio id="despesa" value="2" />
-									<label style={{paddingLeft: '5px', margin: 0}} htmlFor="despesa"> Despesa</label>
-								</div>				
-							</RadioGroup>
-							<SpanErro nome="tipo-lancamento" />
+							<RadioCustomizado nome="tipo-lancamento" required="required"
+								opcoes={[
+									{id: 'receita', valor: 1, descricao: ' Receita'}, 
+									{id: 'despesa', valor: 2, descricao: ' Despesa'}
+								]}
+								funcao={this.trocaCategorias.bind(this)}
+								referencia={input => this.tipoLancamento = input} />
 						</div>
 						<div className="col-md-9">
 							<SelectCustomizado titulo="Categoria" nome="categoria-lancamento"
-								opcoes={this.state.categorias} required="required"
+								opcoes={this.state.categorias} required="required" id="categoria-lancamento"
 								classe="select-lancamento" referencia={input => this.categoriLancamento = input}
 								placeholder="Selecione uma categoria para o lançamento..." />
 						</div>
@@ -154,13 +214,13 @@ export default class Lancamento extends Component {
 							<InputCustomizado htmlFor="data-lancamento" tipo="text" titulo="Data"
 								id="data-lancamento" required="true" nome="data-lancamento"
 								referencia={(input) => this.dataLancamento = input}
-								placeholder="Informe a data do lançamento aqui..." />
+								placeholder="__/__/____" mascara="99/99/9999" />
 						</div>
 						<div className="col-md-5">
 							<InputCustomizado htmlFor="valor-lancamento" tipo="number" titulo="Valor"
 								id="valor-lancamento" required="true" nome="valor-lancamento"
 								referencia={(input) => this.valorLancamento = input}
-								placeholder="Informe o valor do lançamento..." />
+								placeholder="Informe o valor do lançamento..." step="0.01" />
 						</div>
 						<div className="col-md-3"></div>												
 						<div className="form-group col-md-12 text-center" style={{marginTop: '20px'}}>

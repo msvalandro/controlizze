@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import mask from 'jquery-mask-plugin';
 import swal from 'sweetalert2';
 import PubSub from 'pubsub-js';
 import TratadorErros from './utils/TratadorErros';
@@ -35,26 +34,12 @@ export default class Empresa extends Component {
 			.then(empresa => {
 				let data = this.formataData(empresa.data);
 
-				this.cnpj.value = empresa.cnpj;
-				this.nome.value = empresa.nome;
-				this.data.value = data;
-				this.cep.value = empresa.cep;
+				this.cnpj.input.value = empresa.cnpj;
+				this.nome.input.value = empresa.nome;
+				this.data.input.value = data;
+				this.cep.input.value = empresa.cep;
 				this.atividade.value = empresa.atividade;
 			});
-
-		// mascara de CNPJ
-		$("#cnpj").mask('00.000.000/0000-00', {
-			placeholder: '__.___.___/____-__'
-		});
-
-		// mascara de data
-		$("#data").mask('00/00/0000', {
-			placeholder: '__/__/____'
-		});
-
-		$("#cep").mask('00.000-000', {
-			placeholder: '__.___-___'
-		});
 	}
 
 	formataData(date) {
@@ -162,17 +147,20 @@ export default class Empresa extends Component {
 						</div>	
 						<div className="row">
 							<InputCustomizado htmlFor="cnpj" titulo="CNPJ"
+								mascara="99.999.999/9999-99"
 								tipo="text" id="cnpj" required="true" nome="cnpj"
 								referencia={(input) => this.cnpj = input} className="col-md-4"
-								placeholder="Informe o CNPJ da empresa aqui..." />
+								placeholder="__.___.___/____-__" />
 							<InputCustomizado htmlFor="data" titulo="Data de Adesão"
+								mascara="99/99/9999"
 								tipo="text" id="data" required="true" nome="data"
 								referencia={(input) => this.data = input} className="col-md-4"
-								placeholder="Informe a data de adesão ao MEI aqui..." />
+								placeholder="__/__/____" />
 							<InputCustomizado htmlFor="cep" titulo="CEP"
+								mascara="99.999-999"
 								tipo="text" id="cep" required="true" nome="cep"
 								referencia={(input) => this.cep = input} className="col-md-4"
-								placeholder="Informe o CEP da empresa aqui..." />
+								placeholder="__.___-___" />
 						</div>
 						<TextAreaCustomizado htmlFor="atividade" titulo="Atividade"
 							linha="3" coluna="50" nome="atividade"

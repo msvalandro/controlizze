@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PubSub from 'pubsub-js';
+import { RadioGroup, Radio } from 'react-radio-group';
+import InputMask from 'react-input-mask';
 
 export class SelectCustomizado extends Component {
 
@@ -36,7 +38,7 @@ export class SelectCustomizado extends Component {
 			<div className="form-group">
 				<label>{this.props.titulo}</label>
 				<select style={this.state.estilo} value={this.state.value} name={this.props.nome}
-					onChange={this.handleChange} required={this.props.required}
+					onChange={this.handleChange} required={this.props.required} id={this.props.id}
 					ref={this.props.referencia} className={this.props.classe + ' form-control'}>
 					<option value="0" disabled hidden>{this.props.placeholder}</option>
 					{this.props.opcoes.map((opcao) => {
@@ -51,13 +53,35 @@ export class SelectCustomizado extends Component {
 
 export class RadioCustomizado extends Component {
 
+	constructor() {
+		super();
+		this.state = {msgErro: '', selectedValue: 0};
+
+		this.handleChange = this.handleChange.bind(this);		
+	}
+
+	handleChange(value) {
+		this.setState({selectedValue: value});
+		this.props.funcao(value);
+	}
+
 	render() {
 		return(
-			<div className={this.props.classe + " form-check"}>
-				<input className="form-check-input" type="radio" name={this.props.nome}
-					ref={this.props.referencia}
-					id={this.props.id} value={this.props.valor} required={this.props.required} />
-				<label className="form-check-label" htmlFor={this.props.id}>{this.props.titulo}</label>
+			<div>
+				<RadioGroup name={this.props.nome} ref={this.props.referencia}
+					selectedValue={this.state.selectedValue} onChange={this.handleChange} required={this.props.required} >
+					{this.props.opcoes.map(opcao => {
+						return (
+							<div key={opcao.id}>
+								<Radio id={opcao.id} value={opcao.valor} />
+								<label style={{paddingLeft: '5px', margin: 0}} htmlFor={opcao.id}>
+									{opcao.descricao}
+								</label>
+							</div>
+						);
+					})}
+				</RadioGroup>
+				<span className="error">{this.state.msgErro}</span>				
 			</div>
 		);
 	}
@@ -195,9 +219,10 @@ export default class InputCustomizado extends Component {
 		return(
 			<div className={'form-group ' + this.props.className}>
 				<label htmlFor={this.props.htmlFor}>{this.props.titulo}</label>
-				<input type={this.props.tipo} className="form-control" id={this.props.id} 
+				<InputMask mask={this.props.mascara} type={this.props.tipo} 
+					className="form-control" id={this.props.id} 
 					required={this.props.required} name={this.props.nome}
-					disabled={this.props.disabled}
+					disabled={this.props.disabled} step={this.props.step}
 					ref={this.props.referencia} placeholder={this.props.placeholder} />
 				<span className="error">{this.state.msgErro}</span>
 			</div>

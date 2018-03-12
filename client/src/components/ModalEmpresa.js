@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import swal from 'sweetalert2';
 import $ from 'jquery';
-import mask from 'jquery-mask-plugin';
 import PubSub from 'pubsub-js';
 import TratadorErros from './utils/TratadorErros';
 import Notificacao from './utils/Notificacao';
@@ -38,20 +37,6 @@ export default class ModalEmpresa extends Component {
 				$('#modal-empresa').show();
 			}
 		});
-
-		// mascara de CNPJ
-		$("#cnpj-modal").mask('00.000.000/0000-00', {
-			placeholder: '__.___.___/____-__'
-		});
-
-		// mascara de data
-		$("#data-modal").mask('00/00/0000', {
-			placeholder: '__/__/____'
-		});
-
-		$("#cep-modal").mask('00.000-000', {
-			placeholder: '__.___-___'
-		});
 	}
 
 	envia(event) {
@@ -59,8 +44,8 @@ export default class ModalEmpresa extends Component {
 
 		const requestInfo = {
 			method: 'POST',
-			body: JSON.stringify({cnpj: this.cnpj.value, nome: this.nome.value, 
-				data: this.data.value, cep: this.cep.value, atividade: this.atividade.value}),
+			body: JSON.stringify({cnpj: this.cnpj.input.value, nome: this.nome.input.value, 
+				data: this.data.input.value, cep: this.cep.input.value, atividade: this.atividade.value}),
 			headers: new Headers({
 				'Content-Type': 'application/json',
 				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
@@ -107,21 +92,24 @@ export default class ModalEmpresa extends Component {
 							<div className="modal-body">
 								<form>
 									<InputCustomizado htmlFor="cnpj-modal" titulo="CNPJ"
+										mascara="99.999.999/9999-99"
 										tipo="text" id="cnpj-modal" required="true" nome="cnpj"
 										referencia={(input) => this.cnpj = input}
-										placeholder="Informe o CNPJ da empresa aqui..." />
+										placeholder="__.___.___/____-__" />
 									<InputCustomizado htmlFor="nome" titulo="Nome"
 										tipo="text" id="nome" required="true" nome="nome"
 										referencia={(input) => this.nome = input}
 										placeholder="Informe o nome da empresa aqui..." />
 									<InputCustomizado htmlFor="data-modal" titulo="Data de Adesão"
+										mascara="99/99/9999"										
 										tipo="text" id="data-modal" required="true" nome="data"
 										referencia={(input) => this.data = input}
-										placeholder="Informe a data de adesão ao MEI aqui..." />
+										placeholder="__/__/____" />
 									<InputCustomizado htmlFor="cep-modal" titulo="CEP"
+										mascara="99.999-999"
 										tipo="text" id="cep-modal" required="true" nome="cep"
 										referencia={(input) => this.cep = input}
-										placeholder="Informe o CEP da empresa aqui..." />
+										placeholder="__.___-___" />
 									<TextAreaCustomizado htmlFor="atividade" titulo="Atividade"
 										linha="3" coluna="50" nome="atividade"
 										id="atividade" required="true" referencia={(input) => this.atividade = input}

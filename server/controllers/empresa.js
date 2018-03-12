@@ -4,6 +4,44 @@ module.exports = (app) => {
 	const api = {};
 	const { empresa } = app.database.models;
 
+	const validaData = data => {
+		let errors = [];
+		let	date = data.split('/');
+		let day = parseInt(date[0]);
+		let month = parseInt(date[1]);
+		let year = parseInt(date[2]);
+
+		if (month < 1 || month > 12) {
+			return true;
+		}
+
+		if (month === 1 || month === 3 || month === 5 || month === 7 || month === 9 || month === 11) {
+			if (day < 1 || day > 31) {
+				return true;
+			}
+		}
+
+		if (month === 4 || month === 6 || month === 8 || month === 10 || month === 12) {
+			if (day < 1 || day > 30) {
+				return true;
+			}
+		}
+
+		if (month === 2) {
+			if (year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0)) {
+				if (day < 1 || day > 29) {
+					return true;
+				}
+			} else {
+				if (day < 1 || day > 28) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	};
+
 	const validaDados = dados => {
 		let errors = [];
 
@@ -16,8 +54,15 @@ module.exports = (app) => {
 			errors.push({field: 'nome', message: 'O nome da empresa deve conter pelo menos 6 caracteres.'});
 		}
 
-		if (!(dados.data instanceof Date && !isNaN(dados.data.valueOf()))) { 
-			errors.push({field: 'data', message: 'A data deve estar no formato dd/mm/yyyy.'});
+		console.log(dados.data);
+		console.log(new Date());
+		console.log(dados.data > new Date());
+		if (formataData(dados.data) > new Date()) {
+			errors.push({field: 'data', message: 'A data de adesão ao MEI é maior que a data atual.'});			
+		}
+
+		if (validaData(dados.data)) {
+			errors.push({field: 'data', message: 'Data inválida. Por favor, informe a data no formato dd/mm/yyyy.'});
 		}
 
 		if (dados.cep.length < 10) { 
@@ -33,7 +78,7 @@ module.exports = (app) => {
 
 	const formataData = data => {
         let	date = data.split('/');
-        return data.length < 10 ? 'Data inválida.' : new Date(date[2], date[1] - 1, date[0]);
+        return new Date(date[2], date[1] - 1, date[0]);
 	}
 
 	api.lista = (req, res) => {
@@ -50,7 +95,6 @@ module.exports = (app) => {
 
 	api.adiciona = (req, res) => {
 		let dados = req.body;
-		dados.data = formataData(dados.data);
 		let errors = validaDados(dados);
 
 		if (errors.length > 0) {
@@ -58,6 +102,7 @@ module.exports = (app) => {
 			return;
 		}
 
+		dados.data = formataData(dados.data);
 		dados.usuarioId = req.user.id;
 
 		empresa.create(dados)
