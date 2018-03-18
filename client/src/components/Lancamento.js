@@ -14,7 +14,8 @@ export default class Lancamento extends Component {
 			categorias: [], 
 			msg: '',
 			tipoAlerta: 'danger',
-			id: 0
+			id: 0,
+			mascaraData: '99/99/9999'
 		};
 	}
 
@@ -69,16 +70,12 @@ export default class Lancamento extends Component {
 				.then(result => {
 					this.setState({id: result.id});
 					this.descricao.input.value = result.descricao;
-					if (result.tipolancamentoId === 1) {
-						$('#receita').prop('checked', true);
-					} else {
-						$('#despesa').prop('checked', true);
-					}
-					this.categoriLancamento.value = result.categorialancamentoId;
+					this.tipoLancamento.props.onChange(result.tipolancamentoId, result.categorialancamentoId);
 					if (result.numeronf !== null) {
 						$('#check-emissaonf').click();
 						this.numeroNota.input.value = result.numeronf;
 					}
+					this.setState({mascaraData: ''});
 					this.dataLancamento.input.value = this.formataData(result.data);
 					this.valorLancamento.input.value = result.valor;
 				});
@@ -148,7 +145,7 @@ export default class Lancamento extends Component {
 		this.valorLancamento.input.value = '';
 	}
 
-	trocaCategorias(value) {
+	trocaCategorias(value, categoria) {
 		const requestInfo = {
 			headers: new Headers({
 				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
@@ -165,6 +162,9 @@ export default class Lancamento extends Component {
 			})
 			.then(categorias => {
 				this.setState({categorias});
+				if (this.state.id !== 0) {
+					this.categoriLancamento.value = categoria;
+				}
 			});
 	}
 
@@ -214,7 +214,7 @@ export default class Lancamento extends Component {
 							<InputCustomizado htmlFor="data-lancamento" tipo="text" titulo="Data"
 								id="data-lancamento" required="true" nome="data-lancamento"
 								referencia={(input) => this.dataLancamento = input}
-								placeholder="__/__/____" mascara="99/99/9999" />
+								placeholder="__/__/____" mascara={this.state.mascaraData} />
 						</div>
 						<div className="col-md-5">
 							<InputCustomizado htmlFor="valor-lancamento" tipo="number" titulo="Valor"

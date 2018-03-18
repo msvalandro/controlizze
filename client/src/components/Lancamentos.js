@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import $ from 'jquery';
 import { SubmitCustomizado } from './utils/CampoCustomizado';
 
 export default class Lancamentos extends Component {
 
 	constructor() {
 		super();
-		this.state = {lancamentos: []};
+		this.state = {
+			lancamentos: [],
+			tipoAlerta: '',
+			msg: ''
+		};
 	}
 
 	componentWillReceiveProps() {
@@ -43,16 +48,21 @@ export default class Lancamentos extends Component {
 	exclui(id) {
 		const requestInfo = {
 			method: 'DELETE',
-			body: JSON.stringify({id: 'id'}),
+			body: JSON.stringify({id: id}),
 			headers: new Headers({
 				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
 			})
 		};
 
+		let linha = $('#exclui-lancamento-' + id).closest('tr');
+
 		fetch(`http://localhost:8080/api/lancamento/${id}/${this.props.empresa.id}`, requestInfo)
 			.then(response => {
 				if (response.ok) {
-					console.log('excluido');						
+					linha.fadeOut(400);
+					setTimeout(() => {
+						linha.remove();
+					}, 400);
 				} else {
 					throw new Error('Não foi possível deletar o usuário do sistema.');
 				}
@@ -94,7 +104,7 @@ export default class Lancamentos extends Component {
 											</Link>
 										</td>
 										<td>
-											<SubmitCustomizado acao={() => this.exclui(lancamento.id)} 
+											<SubmitCustomizado id={"exclui-lancamento-" + lancamento.id} acao={() => this.exclui(lancamento.id)} 
 												className="btn btn-danger" valor="exclui" titulo="Excluir" />
 										</td>									
 									</tr>

@@ -68,8 +68,6 @@ module.exports = app => {
 			errors.push({field: 'categoria-lancamento', message: 'Selecione uma categoria válida.'});
 		}
 		
-		console.log(dados.numeronf);
-		console.log(typeof(dados.emissaoNf));
 		if (dados.emissaoNf === true && (dados.numeronf === null || dados.numeronf < 0)) { 
 			errors.push({field: 'numero-nota', message: 'N° da NF inválido.'});
 		}

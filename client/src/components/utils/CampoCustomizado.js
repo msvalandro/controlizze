@@ -60,9 +60,9 @@ export class RadioCustomizado extends Component {
 		this.handleChange = this.handleChange.bind(this);		
 	}
 
-	handleChange(value) {
+	handleChange(value, categoria = 0) {
 		this.setState({selectedValue: value});
-		this.props.funcao(value);
+		this.props.funcao(value, categoria);
 	}
 
 	render() {
@@ -155,7 +155,7 @@ export class SubmitCustomizado extends Component {
 
 	render() {
 		return(
-			<button onClick={this.props.acao} style={this.props.estilo} type={this.props.tipo} className={this.props.className} value={this.props.valor}>{this.props.titulo}</button>
+			<button id={this.props.id} onClick={this.props.acao} style={this.props.estilo} type={this.props.tipo} className={this.props.className} value={this.props.valor}>{this.props.titulo}</button>
 		);
 	}
 }
