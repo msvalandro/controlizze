@@ -93,7 +93,11 @@ module.exports = app => {
 	};
 
 	api.lista = (req, res) => {
-		lancamento.findAll({include: [{model: tipolancamento, required: true}], where: {empresaId: req.params.id}})
+		lancamento.findAll({
+				include: [{model: tipolancamento, required: true}], 
+				where: {empresaId: req.params.id},
+				order: ['data']
+			})
 			.then(result => res.json(result))
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};

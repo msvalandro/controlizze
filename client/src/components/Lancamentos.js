@@ -9,6 +9,9 @@ export default class Lancamentos extends Component {
 		super();
 		this.state = {
 			lancamentos: [],
+			lancamentosDoMes: [],
+			mesLancamento: '',
+			saldoMes: 0,
 			tipoAlerta: '',
 			msg: ''
 		};
@@ -32,8 +35,44 @@ export default class Lancamentos extends Component {
 				})
 				.then(lancamentos => {
 					this.setState({lancamentos});
+					this.eventosLancamento();
+					this.lancamentosPorMes();
 				});			
 		}
+	}
+
+	eventosLancamento() {
+		let data = new Date(this.props.empresa.data);
+
+		$('#prev').click(() => {
+			data.setMonth(data.getMonth() - 1);
+			this.lancamentosPorMes(data);
+		});
+		$('#next').click(() => {
+			data.setMonth(data.getMonth() + 1);
+			this.lancamentosPorMes(data);
+		});
+	}
+
+	lancamentosPorMes(dataBase = new Date(this.props.empresa.data)) {
+		let lancamentosDoMes = [];
+		let saldoMes = 0;
+
+		this.state.lancamentos.forEach(l => {
+			let d = new Date(l.data);
+			if (d.getMonth() + 1 === dataBase.getMonth() + 1 && d.getFullYear() === dataBase.getFullYear()) {
+				lancamentosDoMes.push(l);
+				if (l.tipolancamentoId === 1) {
+					saldoMes += parseFloat(l.valor);
+				} else {
+					saldoMes -= parseFloat(l.valor);
+				}
+			}
+		});
+
+		this.setState({lancamentosDoMes});
+		this.setState({saldoMes});		
+		this.setState({mesLancamento: `${(dataBase.getMonth() > 8 ? '' : '0') + (dataBase.getMonth() + 1)}/${dataBase.getFullYear()}`});
 	}
 
 	formataData(date) {
@@ -73,8 +112,13 @@ export default class Lancamentos extends Component {
 	render() {
 		return(
 			<div className="container">
-				<h1 style={{paddingTop: '20px', marginBottom: '40px'}} 
-					className="text-center">Lançamentos</h1>
+				<div id="mes-lancamento" className="row">
+					<div id="prev"><i className="fas fa-2x fa-chevron-left"></i></div>
+					<div className="col-md-8">
+						<h1 className="text-center">Lançamentos {this.state.mesLancamento}</h1>
+					</div>
+					<div id="next"><i className="fas fa-2x fa-chevron-right"></i></div>
+				</div>
 				<div className="table-responsive">
 					<table className="table table-hover">
 						<thead>
@@ -89,7 +133,7 @@ export default class Lancamentos extends Component {
 							</tr>
 						</thead>
 						<tbody>
-							{this.state.lancamentos.map(lancamento => {
+							{this.state.lancamentosDoMes.map(lancamento => {
 								return(
 									<tr key={lancamento.id}>
 										<td>{this.formataData(lancamento.data)}</td>
@@ -112,6 +156,9 @@ export default class Lancamentos extends Component {
 							})}
 						</tbody>
 					</table>
+				</div>
+				<div style={{float: 'right', marginRight: '50px', marginTop: '10px'}}>
+					<span className="font-semibold">Saldo do Mês: {this.state.saldoMes.toFixed(2)}</span>
 				</div>
 			</div>
 		);

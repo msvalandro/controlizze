@@ -1,3 +1,17 @@
 .select-lancamento option {
     color: #495057;
 }
+
+#prev, #next {
+    padding-top: 7px;
+    cursor: pointer;
+}
+
+#mes-lancamento {
+    display:flex; 
+    flex-direction: row; 
+    justify-content: center; 
+    align-items: center;
+    padding-top: 20px; 
+    margin-bottom: 40px;
+}
