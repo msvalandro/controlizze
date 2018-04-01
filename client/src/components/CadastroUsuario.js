@@ -18,7 +18,7 @@ class CadastroUsuario extends Component {
 	envia(event) {
 		event.preventDefault();
 
-		if (this.senha.value !== this.senhaConfirma.value) {
+		if (this.senha.input.value !== this.senhaConfirma.input.value) {
 			this.setState({msg: 'As senhas digitadas não conferem.'});	
 			return;
 		} else {

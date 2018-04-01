@@ -73,7 +73,7 @@ export default class Lancamentos extends Component {
 	render() {
 		return(
 			<div className="container">
-				<h1 style={{marginTop: '20px', marginBottom: '40px'}} 
+				<h1 style={{paddingTop: '20px', marginBottom: '40px'}} 
 					className="text-center">Lançamentos</h1>
 				<div className="table-responsive">
 					<table className="table table-hover">

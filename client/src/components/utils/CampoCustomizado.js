@@ -60,9 +60,9 @@ export class RadioCustomizado extends Component {
 		this.handleChange = this.handleChange.bind(this);		
 	}
 
-	handleChange(value, categoria = 0) {
+	handleChange(value = 0, categoria = 0) {
 		this.setState({selectedValue: value});
-		this.props.funcao(value, categoria);
+		this.props.funcao(value === 0 ? 1 : value, categoria);
 	}
 
 	render() {

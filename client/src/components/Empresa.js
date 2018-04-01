@@ -134,7 +134,7 @@ export default class Empresa extends Component {
 		return(
 			<div className="container">
 				<Notificacao id="notificacao-empresa" estilo={{marginBottom: '10px'}} tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />
-				<h1 style={{marginTop: '20px', marginBottom: '40px'}} 
+				<h1 style={{paddingTop: '20px', marginBottom: '40px'}} 
 					className="text-center">Minha empresa</h1>
 				<div className="row">			
 					<div className="col-md-2"></div>

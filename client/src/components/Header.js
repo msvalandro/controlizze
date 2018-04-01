@@ -27,12 +27,12 @@ export default class Header extends Component {
 
 				<div className="collapse navbar-collapse" id="navbar-conteudo">
 					<ul id="items-header" className="navbar-nav mr-auto">
-						<li className="nav-item active">
+						{/* <li className="nav-item active">
 							<Link className="nav-link" to={'/'}>Home <span className="sr-only">(current)</span></Link>
 						</li>
 						<li className="nav-item">
-							<Link className="nav-link" to={'/lancamento'}>Lançamentos</Link>
-						</li>
+							<Link className="nav-link" to={'/lancamento'}>Relatórios</Link>
+						</li> */}
 					</ul>
 
 					<span>Olá, {this.props.usuario.primeiroNome}</span>

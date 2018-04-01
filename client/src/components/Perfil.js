@@ -32,9 +32,9 @@ export default class Perfil extends Component {
 				}
 			})
 			.then(usuario => {
-				this.primeiroNome.value = usuario.primeiroNome;
-				this.sobreNome.value = usuario.sobreNome;
-				this.email.value = usuario.email;
+				this.primeiroNome.input.value = usuario.primeiroNome;
+				this.sobreNome.input.value = usuario.sobreNome;
+				this.email.input.value = usuario.email;
 			});
 
 		$('#check-senha').click(() => {
@@ -138,7 +138,7 @@ export default class Perfil extends Component {
 		return(
 			<div className="container">
 				<Notificacao id="notificacao-perfil" estilo={{marginBottom: '10px'}} tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />
-				<h1 style={{marginTop: '20px', marginBottom: '40px'}} 
+				<h1 style={{paddingTop: '20px', marginBottom: '40px'}} 
 					className="text-center">Meu perfil</h1>
 				<div className="row">			
 					<div className="col-md-2"></div>

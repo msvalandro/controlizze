@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
+import SideBar from './components/SideBar';
 import ModalEmpresa from './components/ModalEmpresa';
 
 class App extends Component {
@@ -70,12 +71,15 @@ class App extends Component {
 
 		return(
 			<div id="root">
-				<Header usuario={this.state.usuario} />			
+				<Header usuario={this.state.usuario} />
+				<SideBar />
 				{this.state.primeiroAcesso &&				
 					<ModalEmpresa mostra={this.state.primeiroAcesso}/>
 				}
-				{childrenWithProps}
+				<div style={{marginLeft: '250px', marginTop: '56px'}}>
+					{childrenWithProps}
 				</div>
+			</div>
 		);
 	}
 }

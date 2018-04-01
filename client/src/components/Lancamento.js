@@ -15,7 +15,8 @@ export default class Lancamento extends Component {
 			msg: '',
 			tipoAlerta: 'danger',
 			id: 0,
-			mascaraData: '99/99/9999'
+			mascaraData: '99/99/9999',
+			trocaCategoria: false
 		};
 	}
 
@@ -104,12 +105,12 @@ export default class Lancamento extends Component {
 		if (this.state.id === 0) {
 			requestInfo.method = 'POST';
 			requestInfo.body = JSON.stringify({descricao: this.descricao.input.value, tipolancamentoId: this.tipoLancamento.props.selectedValue, 
-				categorialancamentoId: this.categoriLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
+				categorialancamentoId: this.categoriaLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
 				data: this.dataLancamento.input.value, valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
 		} else {
 			requestInfo.method = 'PUT';
 			requestInfo.body = JSON.stringify({id: this.state.id, descricao: this.descricao.input.value, tipolancamentoId: this.tipoLancamento.props.selectedValue, 
-				categorialancamentoId: this.categoriLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
+				categorialancamentoId: this.categoriaLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
 				data: this.dataLancamento.input.value, valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
 		}
 
@@ -140,7 +141,10 @@ export default class Lancamento extends Component {
 
 	limpaForm() {
 		this.descricao.input.value = '';
+		this.setState({trocaCategoria: true});
+		this.tipoLancamento.props.onChange();		
 		if (this.emissaoNf.checked) $('#check-emissaonf').click();
+		this.dataLancamento.value = '';
 		this.dataLancamento.input.value = '';
 		this.valorLancamento.input.value = '';
 	}
@@ -162,8 +166,9 @@ export default class Lancamento extends Component {
 			})
 			.then(categorias => {
 				this.setState({categorias});
-				if (this.state.id !== 0) {
-					this.categoriLancamento.value = categoria;
+				if (this.state.id !== 0 || this.state.trocaCategoria === true) {
+					this.setState({trocaCategoria: false});
+					this.categoriaLancamento.value = categoria;
 				}
 			});
 	}
@@ -172,7 +177,7 @@ export default class Lancamento extends Component {
 		return(
 			<div className="container">
 				<Notificacao id="notificacao-lancamento" estilo={{marginBottom: '10px'}} tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />				
-				<h1 style={{marginTop: '20px', marginBottom: '40px'}} 
+				<h1 style={{paddingTop: '20px', marginBottom: '40px'}} 
 					className="text-center">Cadastro de Lançamento</h1>
 				<div className="row">
 					<div className="col-md-2"></div>
@@ -196,7 +201,7 @@ export default class Lancamento extends Component {
 						<div className="col-md-9">
 							<SelectCustomizado titulo="Categoria" nome="categoria-lancamento"
 								opcoes={this.state.categorias} required="required" id="categoria-lancamento"
-								classe="select-lancamento" referencia={input => this.categoriLancamento = input}
+								classe="select-lancamento" referencia={input => this.categoriaLancamento = input}
 								placeholder="Selecione uma categoria para o lançamento..." />
 						</div>
 						<div className="col-md-3"></div>
