@@ -12,6 +12,13 @@ export default class SideBar extends Component {
 			$('.sidebar-nav li').removeClass('active');
 
 			if (!$(this).hasClass('active')) {
+				if ($(this).find('.fa-xs').hasClass('fa-chevron-down')) {
+					$(this).find('.fa-xs').removeClass('fa-chevron-down');
+					$(this).find('.fa-xs').addClass('fa-chevron-up');
+				} else {
+					$(this).find('.fa-xs').addClass('fa-chevron-down');
+					$(this).find('.fa-xs').removeClass('fa-chevron-up');
+				}
 				$(this).addClass('active');
 			}
 		});
@@ -42,6 +49,9 @@ export default class SideBar extends Component {
 									</div>
 									<div style={{marginLeft: '45px'}}>
 										Lançamentos
+									</div>
+									<div style={{width: '5px'}}>
+										<i className="fas fa-chevron-down fa-xs" style={{paddingLeft: '30px'}}></i>
 									</div>
 								</div>
 							</Link>

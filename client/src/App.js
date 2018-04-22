@@ -73,10 +73,10 @@ class App extends Component {
 			<div id="root">
 				<Header usuario={this.state.usuario} />
 				<SideBar />
-				{this.state.primeiroAcesso &&				
-					<ModalEmpresa mostra={this.state.primeiroAcesso}/>
-				}
-				<div style={{marginLeft: '250px', marginTop: '56px'}}>
+				<div style={{marginLeft: '250px', marginTop: '56px'}}>				
+					{this.state.primeiroAcesso &&				
+						<ModalEmpresa mostra={this.state.primeiroAcesso}/>
+					}
 					{childrenWithProps}
 				</div>
 			</div>

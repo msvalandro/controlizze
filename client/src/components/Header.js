@@ -13,6 +13,10 @@ export default class Header extends Component {
 				$(this).addClass('active');
 			}
 		});
+
+		$('.navbar-brand').click(() => {
+			$('.sidebar-nav li').removeClass('active');
+		});
 	}
 
 	render() {

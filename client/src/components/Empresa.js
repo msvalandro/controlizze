@@ -32,14 +32,18 @@ export default class Empresa extends Component {
 				}
 			})
 			.then(empresa => {
-				let data = this.formataData(empresa.data);
-
-				this.cnpj.input.value = empresa.cnpj;
-				this.nome.input.value = empresa.nome;
-				this.data.input.value = data;
-				this.cep.input.value = empresa.cep;
-				this.atividade.value = empresa.atividade;
+				this.carregaCampos(empresa);				
 			});
+	}
+
+	carregaCampos(empresa) { 
+		let data = this.formataData(empresa.data);
+
+		this.cnpj.input.value = empresa.cnpj;
+		this.nome.input.value = empresa.nome;
+		this.data.input.value = data;
+		this.cep.input.value = empresa.cep;
+		this.atividade.value = empresa.atividade;
 	}
 
 	formataData(date) {
@@ -56,8 +60,8 @@ export default class Empresa extends Component {
 
 		const requestInfo = {
 			method: 'PUT',
-			body: JSON.stringify({cnpj: this.cnpj.value, nome: this.nome.value,
-				data: this.data.value, cep: this.cep.value, atividade: this.atividade.value}),
+			body: JSON.stringify({cnpj: this.cnpj.input.value, nome: this.nome.input.value,
+				data: this.data.input.value, cep: this.cep.input.value, atividade: this.atividade.value}),
 			headers: new Headers({
 				'Content-Type': 'application/json',
 				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
@@ -79,7 +83,13 @@ export default class Empresa extends Component {
 			.then(result => {
 				if (result[0] > 0) {
 					this.setState({msg: 'Dados alterados com sucesso.', tipoAlerta: 'success'});
-					$('#notificacao-empresa').show();				
+					$('#notificacao-empresa').show();
+					setTimeout(() => {
+						let dados = JSON.parse(requestInfo.body);
+						let data = dados.data.split('/');
+						dados.data = `${data[1]}/${data[0]}/${data[2]}`;
+						this.carregaCampos(dados);
+					}, 10);
 					setTimeout(() => {
 						$('#notificacao-empresa').fadeOut(1000);						
 					}, 2000);

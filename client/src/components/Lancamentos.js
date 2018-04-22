@@ -102,6 +102,8 @@ export default class Lancamentos extends Component {
 					setTimeout(() => {
 						linha.remove();
 					}, 400);
+					this.setState({lancamentos: this.state.lancamentos.filter(l => l.id !== id)});
+					this.lancamentosPorMes(new Date(this.state.lancamentosDoMes.find(l => l.id === id).data));
 				} else {
 					throw new Error('Não foi possível deletar o usuário do sistema.');
 				}

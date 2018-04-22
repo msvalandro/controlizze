@@ -81,7 +81,7 @@ export default class ModalEmpresa extends Component {
 
 	render() {
 		return(
-			<div>
+			<div className="container">
 				<Notificacao id="notificacao-modal-empresa" tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />				
 				<div id="modal-empresa" className="modal" role="dialog">
 					<div className="modal-dialog modal-lg" role="document">

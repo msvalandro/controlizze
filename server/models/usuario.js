@@ -54,7 +54,8 @@ export default (sequelize, DataType) => {
 	Usuario.associate = models => {
 		const usuario = models.usuario;		
 		usuario.hasMany(models.empresa, {
-			foreignKey: 'usuarioId'
+			foreignKey: 'usuarioId',
+			onDelete: 'cascade'
 		});
 	};
 

@@ -11,6 +11,10 @@ module.exports = (app) => {
 		let month = parseInt(date[1]);
 		let year = parseInt(date[2]);
 
+		if (isNaN(year) || isNaN(month) || isNaN(day)) {
+			return true;
+		}
+
 		if (month < 1 || month > 12) {
 			return true;
 		}
@@ -54,9 +58,6 @@ module.exports = (app) => {
 			errors.push({field: 'nome', message: 'O nome da empresa deve conter pelo menos 6 caracteres.'});
 		}
 
-		console.log(dados.data);
-		console.log(new Date());
-		console.log(dados.data > new Date());
 		if (formataData(dados.data) > new Date()) {
 			errors.push({field: 'data', message: 'A data de adesão ao MEI é maior que a data atual.'});			
 		}
@@ -119,7 +120,7 @@ module.exports = (app) => {
 			return;
 		}
 
-		dados.data = new Date(req.body.data);
+		dados.data = formataData(dados.data);
 		dados.usuarioId = req.user.id;
 
 		empresa.update(req.body, { where: {usuarioId: req.user.id} })

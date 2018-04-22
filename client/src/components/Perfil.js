@@ -49,7 +49,7 @@ export default class Perfil extends Component {
 		//check update senha
 		if ($('#check-senha:checked').length > 0) {
 			flagSenha = true;
-			if (this.senha.value !== this.senhaConfirma.value) {
+			if (this.senha.input.value !== this.senhaConfirma.input.value) {
 				this.setState({msg: 'As senhas digitadas não conferem.', tipoAlerta: 'danger'});
 				$('#notificacao-perfil').show();
 				return;
@@ -60,8 +60,8 @@ export default class Perfil extends Component {
 
 		const requestInfo = {
 			method: 'PUT',
-			body: JSON.stringify({primeiroNome: this.primeiroNome.value, 
-				sobreNome: this.sobreNome.value, email: this.email.value, senha: this.senha.value, flagSenha}),
+			body: JSON.stringify({primeiroNome: this.primeiroNome.input.value, 
+				sobreNome: this.sobreNome.input.value, email: this.email.input.value, senha: this.senha.input.value, flagSenha}),
 			headers: new Headers({
 				'Content-Type': 'application/json',
 				'Authorization': `bearer ${localStorage.getItem('auth-token')}`

@@ -34,12 +34,10 @@ export default (sequelize, DataType) => {
 
 	Lancamento.associate = models => {
 		const lancamento = models.lancamento;
-		lancamento.belongsTo(models.empresa, {
-			onDelete: 'cascade'
-		});
+		lancamento.belongsTo(models.empresa);
 		lancamento.belongsTo(models.tipolancamento);
 		lancamento.belongsTo(models.categorialancamento);
 	};
 
 	return Lancamento;
-}
+};
