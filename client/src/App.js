@@ -52,7 +52,8 @@ class App extends Component {
 				if (response.ok) {
 					return response.json();
 				} else {
-					throw new Error('Não foi possível acessar os dados do sistema.');
+					localStorage.removeItem('auth-token');
+					this.props.history.push('/');
 				}
 			})
 			.then(empresa => {

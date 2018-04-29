@@ -12,6 +12,7 @@ export default class Lancamentos extends Component {
 			lancamentosDoMes: [],
 			mesLancamento: '',
 			saldoMes: 0,
+			saldoTotal: 0,
 			tipoAlerta: '',
 			msg: ''
 		};
@@ -57,8 +58,15 @@ export default class Lancamentos extends Component {
 	lancamentosPorMes(dataBase = new Date(this.props.empresa.data)) {
 		let lancamentosDoMes = [];
 		let saldoMes = 0;
+		let saldoTotal = 0;
 
 		this.state.lancamentos.forEach(l => {
+			if (l.tipolancamentoId === 1) {
+				saldoTotal += parseFloat(l.valor);
+			} else {
+				saldoTotal -= parseFloat(l.valor);
+			}
+
 			let d = new Date(l.data);
 			if (d.getMonth() + 1 === dataBase.getMonth() + 1 && d.getFullYear() === dataBase.getFullYear()) {
 				lancamentosDoMes.push(l);
@@ -71,7 +79,8 @@ export default class Lancamentos extends Component {
 		});
 
 		this.setState({lancamentosDoMes});
-		this.setState({saldoMes});		
+		this.setState({saldoMes});
+		this.setState({saldoTotal});		
 		this.setState({mesLancamento: `${(dataBase.getMonth() > 8 ? '' : '0') + (dataBase.getMonth() + 1)}/${dataBase.getFullYear()}`});
 	}
 
@@ -144,7 +153,7 @@ export default class Lancamentos extends Component {
 										<td>{lancamento.numeronf}</td>
 										<td>{lancamento.valor}</td>
 										<td>
-											<Link to={{pathname: '/lancamento', state: {id: lancamento.id}}}>
+											<Link to={{pathname: '/lancamento/edit', state: {id: lancamento.id}}}>
 												<SubmitCustomizado className="btn btn-success" 
 												valor="edita" titulo="Editar" />
 											</Link>
@@ -159,8 +168,13 @@ export default class Lancamentos extends Component {
 						</tbody>
 					</table>
 				</div>
-				<div style={{float: 'right', marginRight: '50px', marginTop: '10px'}}>
-					<span className="font-semibold">Saldo do Mês: {this.state.saldoMes.toFixed(2)}</span>
+				<div style={{height: '35px'}}>
+					<div style={{float: 'right', marginRight: '50px', marginTop: '10px'}}>
+						<span style={{color: '#434a51'}} className="font-semibold">Saldo do Mês: {this.state.saldoMes.toFixed(2)}</span>
+					</div>
+				</div>
+				<div style={{float: 'right', marginRight: '50px', marginTop: '0px'}}>
+					<h5 className="font-semibold">Total em Caixa: {this.state.saldoTotal.toFixed(2)}</h5>
 				</div>
 			</div>
 		);

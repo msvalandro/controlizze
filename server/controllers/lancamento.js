@@ -110,6 +110,8 @@ module.exports = app => {
 
 	api.adiciona = (req, res) => {
 		let dados = req.body;
+		let parcelas = dados.parcelas;
+		delete dados.parcelas;		
 		dados.numeronf = dados.numeronf === '' ? null : parseInt(dados.numeronf);
 
 		empresa.findOne({ where: {id: dados.empresaId} })
@@ -123,11 +125,30 @@ module.exports = app => {
 					return;
 				}
 
-				dados.data = formataData(dados.data);
+				dados.data = formataData(dados.data);			
+				let lancamentos = [];
+				const data = new Date(dados.data.getTime());
 
-				lancamento.create(dados)
-					.then(result => res.json(result))
-					.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+				if (dados.parcelado === true) {
+					delete dados.parcelado;					
+					for (let i = 0; i < parcelas; i++) {
+						let d = Object.assign({}, dados);
+						d.descricao = d.descricao + ` - Parcela ${i + 1}/${parcelas}`;
+						let date = new Date(data.getTime());
+						date.setMonth(data.getMonth() + i)
+						d.data = date;				
+						lancamentos.push(d);
+					}
+				} else {
+					delete dados.parcelado;
+					lancamentos.push(dados);
+				}		
+
+				lancamentos.forEach(l => {
+					lancamento.create(l)
+						.then(result => res.json(result))
+						.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+				});
 			})
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};

@@ -49,6 +49,19 @@ export default class Lancamento extends Component {
 				$('#numero-nota').attr('disabled', true);
 			}
 		});
+
+		$('#check-parcelado').click(function() {
+			if ($(this).is(':checked')) {
+				$('#numero-parcelas').removeAttr('disabled');
+				$('#valor-lancamento').attr("placeholder", "Informe o valor da parcela...");
+				$('#valor-lancamento').siblings('label').html('Valor da parcela');
+			} else {
+				$('#numero-parcelas').val('');
+				$('#numero-parcelas').attr('disabled', true);
+				$('#valor-lancamento').attr("placeholder", "Informe o valor do lançamento...");
+				$('#valor-lancamento').siblings('label').html('Valor');
+			}
+		});
 	}
 
 	componentWillReceiveProps() {
@@ -106,12 +119,14 @@ export default class Lancamento extends Component {
 			requestInfo.method = 'POST';
 			requestInfo.body = JSON.stringify({descricao: this.descricao.input.value, tipolancamentoId: this.tipoLancamento.props.selectedValue, 
 				categorialancamentoId: this.categoriaLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
-				data: this.dataLancamento.input.value, valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
+				parcelado: this.parcelado.checked, parcelas: this.numeroParcelas.input.value, data: this.dataLancamento.input.value, 
+				valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
 		} else {
 			requestInfo.method = 'PUT';
 			requestInfo.body = JSON.stringify({id: this.state.id, descricao: this.descricao.input.value, tipolancamentoId: this.tipoLancamento.props.selectedValue, 
 				categorialancamentoId: this.categoriaLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
-				data: this.dataLancamento.input.value, valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
+				parcelado: this.parcelado.checked, parcelas: this.numeroParcelas.input.value, data: this.dataLancamento.input.value, 
+				valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
 		}
 
 		fetch('http://localhost:8080/api/lancamentos', requestInfo)
@@ -144,6 +159,7 @@ export default class Lancamento extends Component {
 		this.setState({trocaCategoria: true});
 		this.tipoLancamento.props.onChange();		
 		if (this.emissaoNf.checked) $('#check-emissaonf').click();
+		if (this.emissaoNf.checked) $('#check-parcelado').click();
 		this.dataLancamento.value = '';
 		this.dataLancamento.input.value = '';
 		this.valorLancamento.input.value = '';
@@ -214,7 +230,21 @@ export default class Lancamento extends Component {
 								referencia={(input) => this.numeroNota = input}
 								placeholder="N° NF" />
 						</div>
-						<div className="col-md-9"></div>						
+						<div className="col-md-1"></div>
+						{this.state.id === 0 ? (
+							<div className="col-md-3">
+								<CheckBoxDireitaCustomizado id="check-parcelado" titulo="Lanc. parcelado?" 
+									referencia={input => this.parcelado = input} />
+								<InputCustomizado htmlFor="numero-parcelas" tipo="number" 
+									id="numero-parcelas" required="true" nome="numero-parcelas"
+									disabled="true"
+									referencia={(input) => this.numeroParcelas = input}
+									placeholder="N° Parcelas" />
+							</div>
+						) : (
+							<div className="col-md-3"></div>
+						)}
+						<div className="col-md-5"></div>
 						<div className="col-md-4">
 							<InputCustomizado htmlFor="data-lancamento" tipo="text" titulo="Data"
 								id="data-lancamento" required="true" nome="data-lancamento"
