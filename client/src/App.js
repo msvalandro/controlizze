@@ -74,7 +74,7 @@ class App extends Component {
 			<div id="root">
 				<Header usuario={this.state.usuario} />
 				<SideBar />
-				<div style={{marginLeft: '250px', marginTop: '56px'}}>				
+				<div id="principal" style={{marginLeft: '250px', marginTop: '56px'}}>				
 					{this.state.primeiroAcesso &&				
 						<ModalEmpresa mostra={this.state.primeiroAcesso}/>
 					}

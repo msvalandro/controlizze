@@ -17,14 +17,18 @@ export default class Header extends Component {
 		$('.navbar-brand').click(() => {
 			$('.sidebar-nav li').removeClass('active');
 		});
+
+		$('#botao-menu').click(() => {
+			$('#wrapper').toggle();
+		});
 	}
 
 	render() {
 		return(
 			<nav className="navbar navbar-expand-md navbar-dark bg-dark">
 				<Link className="navbar-brand" to={'/'}>Controlizze</Link>
-				<button className="navbar-toggler" type="button" 
-					data-toggle="collapse" data-target="#navbar-conteudo" 
+				<button id="botao-menu" className="navbar-toggler" type="button" 
+					// data-toggle="collapse" data-target="#navbar-conteudo" 
 					aria-controls="navbar-conteudo" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>
