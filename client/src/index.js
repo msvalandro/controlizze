@@ -14,6 +14,8 @@ import Perfil from './components/Perfil';
 import Empresa from './components/Empresa';
 import Lancamento from './components/Lancamento';
 import Lancamentos from './components/Lancamentos';
+import Dashboard from './components/Dashboard';
+import Categoria from './components/Categoria';
 import registerServiceWorker from './registerServiceWorker';
 
 function verificaAutenticacao(component) {
@@ -27,7 +29,7 @@ function verificaAutenticacao(component) {
 ReactDOM.render(
 	(<Router>
 		<Switch>
-			<Route exact path="/" render={props => (verificaAutenticacao(<App {...props} />))} />
+			<Route exact path="/" render={props => (verificaAutenticacao(<App {...props} children={<Dashboard {...props}/>} />))} />
 			<Route path="/login" render={props => 
 				localStorage.getItem('auth-token') === null ? <Login {...props} /> : <Redirect to="/" />} />
 			<Route path="/logout" component={Logout} />
@@ -36,6 +38,7 @@ ReactDOM.render(
 			<Route path="/lancamento" render={props => (verificaAutenticacao(<App {...props} children={<Lancamento {...props}/>} />))} />
 			<Route path="/lancamentos" render={props => (verificaAutenticacao(<App {...props} children={<Lancamentos {...props}/>} />))} />			
 			<Route path="/empresa" render={props => (verificaAutenticacao(<App {...props} children={<Empresa {...props}/>} />))} />			
+			<Route path="/categoria" render={props => (verificaAutenticacao(<App {...props} children={<Categoria {...props}/>} />))} />			
 			<Route path="/*" render={() => (<Redirect to={'/'}/>)} />				
 		</Switch>
 	</Router>)

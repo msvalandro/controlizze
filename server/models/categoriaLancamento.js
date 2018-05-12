@@ -18,10 +18,11 @@ export default (sequelize, DataType) => {
     CategoriaLancamento.associate = models => {
 		const categoriaLancamento = models.categorialancamento;
         categoriaLancamento.belongsTo(models.tipolancamento);
+		categoriaLancamento.belongsTo(models.empresa);        
         categoriaLancamento.hasMany(models.lancamento, {
-			foreignKey: 'categorialancamentoId'
+            foreignKey: 'categorialancamentoId',
+            onDelete: 'restrict'
 		});
 	};
-
     return CategoriaLancamento;
 };

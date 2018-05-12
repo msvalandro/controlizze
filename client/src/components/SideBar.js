@@ -31,7 +31,7 @@ export default class SideBar extends Component {
 				let arrayLinks = $('.clicavel');
 				arrayLinks.each(function() {
 					target = $(this).children('a').attr('href');
-					if (!$(this).hasClass('active')) {
+					if (!$(this).hasClass('active') && target !== '/') {
 						if ($(this).find('.fa-xs').hasClass('fa-chevron-right')) {
 							$(this).children('.fa-xs').removeClass('fa-chevron-right');
 							$(this).children('.fa-xs').addClass('fa-chevron-down');
@@ -55,7 +55,7 @@ export default class SideBar extends Component {
 				<div id="sidebar-wrapper">
 					<ul className="sidebar-nav" style={{marginTop: '20px'}}>
 						<li className="clicavel">
-							<Link to={'#collapseDashboard'}>
+							<Link to={'/'}>
 								<div className="row">
 									<div style={{width: '5px'}}>
 										<i className="fas fa-tachometer-alt"></i>
@@ -63,19 +63,10 @@ export default class SideBar extends Component {
 									<div style={{marginLeft: '45px'}}>
 										Dashboard
 									</div>
-									<div style={{width: '40px', float: 'right', position: 'absolute', right: '40px'}}>
-										<i className="fas fa-chevron-right fa-xs"></i>
-									</div>
 								</div>
 							</Link>
 						</li>
-						<div id="collapseDashboard" className="collapse">
-							<ul className="collapse-listas">
-								<li>
-									<a></a>
-								</li>
-							</ul>
-						</div>
+
 						<li id="lancamentos-li" className="clicavel">
 							<Link to={'#collapseLancamentos'} data-toggle="collapse">
 								<div className="row">
@@ -120,7 +111,7 @@ export default class SideBar extends Component {
 							</ul>
 						</div>
 						<li className="clicavel">
-							<Link to={'#collapseRelatorios'}>
+							<Link to={'#collapseRelatorios'} data-toggle="collapse">
 								<div className="row">
 									<div className="text-center" style={{width: '5px'}}>
 										<i className="far fa-clipboard" style={{paddingLeft: '5px'}}></i>
@@ -137,7 +128,31 @@ export default class SideBar extends Component {
 						<div id="collapseRelatorios" className="collapse">
 							<ul className="collapse-listas">
 								<li>
-									<a></a>
+									<Link to={'/lancamento'}>
+										<div className="row">
+											<div style={{marginLeft: '25px'}}>
+												Lista de Recebimentos
+											</div>
+										</div>
+									</Link>
+								</li>
+								<li>
+									<Link to={'/lancamento'}>
+										<div className="row">
+											<div style={{marginLeft: '25px'}}>
+												Lista de Pagamentos
+											</div>
+										</div>
+									</Link>
+								</li>
+								<li>
+									<Link to={'/lancamento'}>
+										<div className="row">
+											<div style={{marginLeft: '25px'}}>
+												Resumo Financeiro
+											</div>
+										</div>
+									</Link>
 								</li>
 							</ul>
 						</div>
@@ -178,6 +193,18 @@ export default class SideBar extends Component {
 											</div>
 											<div style={{marginLeft: '45px'}}>
 												Empresa
+											</div>
+										</div>
+									</Link>
+								</li>
+								<li>
+									<Link to={'/categoria'}>
+										<div className="row">
+											<div style={{width: '5px'}}>
+												<i className="fas fa-list-alt"></i>
+											</div>
+											<div style={{marginLeft: '45px'}}>
+												Categorias
 											</div>
 										</div>
 									</Link>

@@ -5,3 +5,23 @@
 div.container {
     padding-top: 5px;
 }
+
+.absolut-center {
+    width: 50%;
+    height: 30%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: -200px; left: 250px; bottom: 0; right: 0;
+}
+
+@media(max-width: 600px) {
+    .absolut-center {
+        left: 0;
+    }
+}
+
+.centralizado {
+    width: 50%;
+    margin: 0 auto;
+}

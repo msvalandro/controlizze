@@ -64,7 +64,7 @@ module.exports = app => {
 			errors.push({field: 'categoria-lancamento', message: 'Selecione uma categoria válida.'});
 		}
 		
-		if (dados.tipolancamentoId === 2 && (dados.categorialancamentoId < 1 || dados.categorialancamentoId > 5)) { 
+		if (dados.tipolancamentoId === 2 && (dados.categorialancamentoId < 1)) { 
 			errors.push({field: 'categoria-lancamento', message: 'Selecione uma categoria válida.'});
 		}
 		
