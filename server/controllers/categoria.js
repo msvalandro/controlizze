@@ -61,10 +61,16 @@ module.exports = (app) => {
 		empresa.findOne({ where: {id: req.user.id} })
 			.then(result => {
 				emp = result;
-
-				categorialancamento.findAll({ where: {tipolancamentoId: req.params.id, empresaId: emp.id}})
-					.then(result => res.json(result))
-					.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+				if (req.params.id == 1) {
+					categorialancamento.findAll({ where: {tipolancamentoId: req.params.id}})
+						.then(result => res.json(result))
+						.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+				} else {
+					categorialancamento.findAll({ where: {empresaId: emp.id}})
+						.then(result => res.json(result))
+						.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+				}
+				
 			})
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));			
 		

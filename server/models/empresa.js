@@ -57,6 +57,10 @@ export default (sequelize, DataType) => {
 			foreignKey: 'empresaId',
 			onDelete: 'cascade'
 		});
+		empresa.hasMany(models.categorialancamento, {
+			foreignKey: 'empresaId',
+			onDelete: 'cascade'
+		});
 	};
 
   	return Empresa;
