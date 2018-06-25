@@ -70,9 +70,7 @@ export default class Categoria extends Component {
 				}
 			})
 			.then(result => {
-				console.log(result);
 				if (Array.isArray(result)) {
-					console.log('entrei');
 					let categorias = this.state.categorias.filter(c => c.id !== result[1][0].id);
 					categorias.push(result[1][0]);
 					this.setState({categorias});
@@ -84,7 +82,6 @@ export default class Categoria extends Component {
 					this.setState({id: 0});					
 					this.limpaForm();
 				} else if (result !== undefined) {
-					console.log('ladsh');
 					let categorias = this.state.categorias;
 					categorias.push(result);
 					this.setState({categorias});
