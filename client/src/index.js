@@ -16,6 +16,7 @@ import Lancamento from './components/Lancamento';
 import Lancamentos from './components/Lancamentos';
 import Dashboard from './components/Dashboard';
 import Categoria from './components/Categoria';
+import ResumoFinanceiro from './components/reports/ResumoFinanceiro';
 import registerServiceWorker from './registerServiceWorker';
 
 function verificaAutenticacao(component) {
@@ -39,6 +40,7 @@ ReactDOM.render(
 			<Route path="/lancamentos" render={props => (verificaAutenticacao(<App {...props} children={<Lancamentos {...props}/>} />))} />			
 			<Route path="/empresa" render={props => (verificaAutenticacao(<App {...props} children={<Empresa {...props}/>} />))} />			
 			<Route path="/categoria" render={props => (verificaAutenticacao(<App {...props} children={<Categoria {...props}/>} />))} />			
+			<Route path="/resumofinanceiro" render={props => (verificaAutenticacao(<App {...props} children={<ResumoFinanceiro {...props}/>} />))} />
 			<Route path="/*" render={() => (<Redirect to={'/'}/>)} />				
 		</Switch>
 	</Router>)

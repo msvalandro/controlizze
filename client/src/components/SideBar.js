@@ -146,7 +146,7 @@ export default class SideBar extends Component {
 									</Link>
 								</li>
 								<li>
-									<Link to={'/lancamento'}>
+									<Link to={'/resumofinanceiro'}>
 										<div className="row">
 											<div style={{marginLeft: '25px'}}>
 												Resumo Financeiro

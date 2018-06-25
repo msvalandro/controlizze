@@ -31,6 +31,9 @@ export class SelectCustomizado extends Component {
 
 	handleChange(event) {
 		this.setState({estilo: {}, value: event.target.value});
+		if (this.props.funcao !== undefined) {
+			this.props.funcao(event.target.value);			
+		}
 	}
 
 	render() {
@@ -58,6 +61,18 @@ export class RadioCustomizado extends Component {
 		this.state = {msgErro: '', selectedValue: 0};
 
 		this.handleChange = this.handleChange.bind(this);		
+	}
+
+	componentDidMount() {
+		PubSub.subscribe('erro-validacao', (topico, erro) => {
+			if (erro.field === this.props.nome) {
+				this.setState({msgErro: erro.message});	
+			}
+		});
+
+		PubSub.subscribe('limpa-erros', topico => {
+			this.setState({msgErro: ''});
+		});
 	}
 
 	handleChange(value = 0, categoria = 0) {

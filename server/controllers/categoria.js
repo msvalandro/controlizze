@@ -29,7 +29,7 @@ module.exports = (app) => {
 					res.status(HttpStatus.BAD_REQUEST).json(errors);
 					return;
 				}				
-
+	
 				categorialancamento.create(dados)
 					.then(result => res.json(result))
 					.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
@@ -58,7 +58,7 @@ module.exports = (app) => {
 	};
 
 	api.lista = (req, res) => {  
-		empresa.findOne({ where: {id: req.user.id} })
+		empresa.findOne({ where: {usuarioId: req.user.id} })
 			.then(result => {
 				emp = result;
 				if (req.params.id == 1) {

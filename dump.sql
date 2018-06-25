@@ -40,7 +40,7 @@ CREATE TABLE `categorialancamentos` (
 
 LOCK TABLES `categorialancamentos` WRITE;
 /*!40000 ALTER TABLE `categorialancamentos` DISABLE KEYS */;
-INSERT INTO `categorialancamentos` VALUES (1,'Revenda de Mercadorias','2018-03-03 22:25:15','2018-03-03 22:25:15',1),(2,'Venda de produtos fabricação própria','2018-03-03 22:25:44','2018-03-03 22:25:44',1),(3,'Prestação de Serviços','2018-03-03 22:25:57','2018-03-03 22:25:57',1),(4,'Teste','2018-03-10 21:42:46','2018-03-10 21:42:46',2);
+INSERT INTO `categorialancamentos` (descricao, createdAt, updatedAt, tipolancamentoId) VALUES ('Revenda de Mercadorias','2018-03-03 22:25:15','2018-03-03 22:25:15',1),('Venda de produtos fabricação própria','2018-03-03 22:25:44','2018-03-03 22:25:44',1),('Prestação de Serviços','2018-03-03 22:25:57','2018-03-03 22:25:57',1);
 /*!40000 ALTER TABLE `categorialancamentos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

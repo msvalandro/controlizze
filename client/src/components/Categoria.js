@@ -24,7 +24,7 @@ export default class Categoria extends Component {
 			})
 		};
 
-		if (this.props.empresa.id !== undefined) {
+		if (this.props.empresa !== null) {
 			fetch(`http://localhost:8080/api/categorias/empresa/${this.props.empresa.id}`, requestInfo)
 				.then(response => {
 					if (response.ok) {
@@ -74,6 +74,13 @@ export default class Categoria extends Component {
 					let categorias = this.state.categorias.filter(c => c.id !== result[1][0].id);
 					categorias.push(result[1][0]);
 					this.setState({categorias});
+					this.setState({msg: 'Dados gravados com sucesso.', tipoAlerta: 'success'});
+					$('#notificacao-categoria').show();				
+					setTimeout(() => {
+						$('#notificacao-categoria').fadeOut(1000);						
+					}, 2000);
+					this.setState({id: 0});					
+					this.limpaForm();
 				} else if (result !== undefined) {
 					let categorias = this.state.categorias;
 					categorias.push(result);
@@ -108,11 +115,17 @@ export default class Categoria extends Component {
 		fetch(`http://localhost:8080/api/categorias/${id}`, requestInfo)
 			.then(response => {
 				if (response.ok) {
+					this.setState({id: 0});
 					linha.fadeOut(400);
 					setTimeout(() => {
 						linha.remove();
 					}, 400);
 					this.setState({categorias: this.state.categorias.filter(c => c.id !== id)});
+					this.setState({msg: 'Categoria excluída com sucesso.', tipoAlerta: 'danger'});
+					$('#notificacao-categoria').show();				
+					setTimeout(() => {
+						$('#notificacao-categoria').fadeOut(1000);						
+					}, 2000);
 				} else {
 					throw new Error('Não foi possível deletar a categoria do sistema.');
 				}

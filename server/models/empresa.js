@@ -52,15 +52,18 @@ export default (sequelize, DataType) => {
 
 	Empresa.associate = models => {
 		const empresa = models.empresa;
-		empresa.belongsTo(models.usuario);
+		empresa.belongsTo(models.usuario, {
+			foreignKey: 'usuarioId',
+			onDelete: 'cascade'
+		});
 		empresa.hasMany(models.lancamento, {
-			foreignKey: 'empresaId',
-			onDelete: 'cascade'
-		});
+            foreignKey: 'empresaId',
+            onDelete: 'cascade'
+        });
 		empresa.hasMany(models.categorialancamento, {
-			foreignKey: 'empresaId',
-			onDelete: 'cascade'
-		});
+            foreignKey: 'empresaId',
+            onDelete: 'cascade'
+        });
 	};
 
   	return Empresa;

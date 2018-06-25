@@ -17,9 +17,7 @@ export default (sequelize, DataType) => {
 
     TipoLancamento.associate = models => {
         const tipoLancamento = models.tipolancamento;
-        tipoLancamento.hasMany(models.lancamento, {
-			foreignKey: 'tipolancamentoId'
-		});
+        tipoLancamento.hasMany(models.lancamento);
     };
 
     return TipoLancamento;

@@ -1,0 +1,11 @@
+.resumo-financeiro {
+    font-size: 83%;
+}
+
+.resumo-financeiro-print {
+    font-size: 100%;
+    zoom: 0.62;
+    margin-left: 50px !important; 
+    margin-right: 50px !important;
+    margin-top: 200px !important;      
+}

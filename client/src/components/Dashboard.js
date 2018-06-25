@@ -37,18 +37,12 @@ export default class Dashboard extends Component {
 		let saldo = 0;
 
 		this.state.lancamentos.forEach(l => {
-			console.log(l);
 			if (l.tipolancamentoId === 1) {
 				saldo += parseFloat(l.valor);
-		console.log(saldo);
-				
 			} else {
 				saldo -= parseFloat(l.valor);
-		console.log(saldo);
-				
 			}
 		});
-		console.log(saldo);
 		
 		this.setState({saldo});
 	}

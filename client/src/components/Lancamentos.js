@@ -42,7 +42,7 @@ export default class Lancamentos extends Component {
 	}
 
 	eventosLancamento() {
-		let data = new Date(this.props.empresa.data);
+		let data = new Date();
 
 		$('#prev').click(() => {
 			data.setMonth(data.getMonth() - 1);
@@ -54,7 +54,7 @@ export default class Lancamentos extends Component {
 		});
 	}
 
-	lancamentosPorMes(dataBase = new Date(this.props.empresa.data)) {
+	lancamentosPorMes(dataBase = new Date()) {
 		let lancamentosDoMes = [];
 		let saldoMes = 0;
 

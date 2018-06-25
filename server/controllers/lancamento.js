@@ -18,6 +18,10 @@ module.exports = app => {
 			return true;
 		}
 
+		if (year < 2008 || year > (new Date().getFullYear() + 1)) {
+			return true;
+		}
+
 		if (month < 1 || month > 12) {
 			return true;
 		}
@@ -54,8 +58,8 @@ module.exports = app => {
 
 		if (dados.descricao.length < 3) { 
 			errors.push({field: 'descricao', message: 'A descrição deve conter no mínimo 3 caracteres.'});
-		}
-		
+		}	
+
 		if (dados.tipolancamentoId < 1 || dados.tipolancamentoId > 2) { 
 			errors.push({field: 'tipo-lancamento', message: 'Marque uma opção.'});
 		}

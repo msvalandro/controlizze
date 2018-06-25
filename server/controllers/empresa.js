@@ -3,6 +3,7 @@ import HttpStatus from 'http-status';
 module.exports = (app) => {
 	const api = {};
 	const { empresa } = app.database.models;
+	const { categorialancamento } = app.database.models;
 
 	const validaData = data => {
 		let errors = [];
@@ -12,6 +13,10 @@ module.exports = (app) => {
 		let year = parseInt(date[2]);
 
 		if (isNaN(year) || isNaN(month) || isNaN(day)) {
+			return true;
+		}
+
+		if (year < 2008 || year > new Date().getFullYear()) {
 			return true;
 		}
 
@@ -107,7 +112,16 @@ module.exports = (app) => {
 		dados.usuarioId = req.user.id;
 
 		empresa.create(dados)
-			.then(result => res.json(result))
+			.then(result => {
+				let cat = {};
+				cat.descricao = 'Despesas Gerais';
+				cat.empresaId = result.dataValues.id;
+				cat.tipolancamentoId = 2;
+				categorialancamento.create(cat)
+					.then(result => console.log(result))
+					.catch(err => console.log(err));
+				return res.json(result);
+			})
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 	};
 

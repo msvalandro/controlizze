@@ -5,7 +5,7 @@ import Sequelize from 'sequelize';
 module.exports = app => {
 	const api = {};
 	const config = app.config;
-	const { usuario } = app.database.models;
+	const { usuario, empresa, lancamento } = app.database.models;
 	const Op = Sequelize.Op;
 	
 	const validaDados = dados => {
@@ -97,9 +97,14 @@ module.exports = app => {
 	};
 	
 	api.deleta = (req, res) => {
-		usuario.destroy({ where: req.user })
-			.then(() => res.sendStatus(HttpStatus.NO_CONTENT))
-			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+		empresa.findOne({where: {usuarioId: req.user.id}})
+			.then(result => {
+				lancamento.destroy({where: {empresaId: result.id}});
+				usuario.destroy({ where: req.user })
+					.then(() => res.sendStatus(HttpStatus.NO_CONTENT))
+					.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+			})
+			.catch(err => console.log(err));
 	};
 	
 	return api;

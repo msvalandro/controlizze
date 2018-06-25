@@ -186,7 +186,8 @@ export default class Lancamento extends Component {
 					this.setState({trocaCategoria: false});
 					this.categoriaLancamento.value = categoria;
 				}
-			});
+			})
+			.catch(err => console.log(err));
 	}
 
 	render() {

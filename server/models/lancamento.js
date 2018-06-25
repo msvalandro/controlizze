@@ -34,9 +34,17 @@ export default (sequelize, DataType) => {
 
 	Lancamento.associate = models => {
 		const lancamento = models.lancamento;
-		lancamento.belongsTo(models.empresa);
-		lancamento.belongsTo(models.tipolancamento);
-		lancamento.belongsTo(models.categorialancamento);
+		lancamento.belongsTo(models.empresa, {
+			foreignKey: 'empresaId',
+			onDelete: 'cascade'
+		});
+		lancamento.belongsTo(models.tipolancamento, {
+			foreignKey: 'tipolancamentoId'
+		});
+		lancamento.belongsTo(models.categorialancamento, {
+            foreignKey: 'categorialancamentoId',
+            onDelete: 'restrict'
+		});
 	};
 
 	return Lancamento;
