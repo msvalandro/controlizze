@@ -16,7 +16,11 @@ import Lancamento from './components/Lancamento';
 import Lancamentos from './components/Lancamentos';
 import Dashboard from './components/Dashboard';
 import Categoria from './components/Categoria';
+import DeclaracaoAnual from './components/reports/DeclaracaoAnual';
+import ResumoMensal from './components/reports/ResumoMensal';
 import ResumoFinanceiro from './components/reports/ResumoFinanceiro';
+import Faturamento from './components/charts/Faturamento';
+import DespesasCategoria from './components/charts/DespesasCategoria';
 import registerServiceWorker from './registerServiceWorker';
 
 function verificaAutenticacao(component) {
@@ -40,7 +44,11 @@ ReactDOM.render(
 			<Route path="/lancamentos" render={props => (verificaAutenticacao(<App {...props} children={<Lancamentos {...props}/>} />))} />			
 			<Route path="/empresa" render={props => (verificaAutenticacao(<App {...props} children={<Empresa {...props}/>} />))} />			
 			<Route path="/categoria" render={props => (verificaAutenticacao(<App {...props} children={<Categoria {...props}/>} />))} />			
+			<Route path="/declaracaoanual" render={props => (verificaAutenticacao(<App {...props} children={<DeclaracaoAnual {...props}/>} />))} />						
+			<Route path="/resumomensal" render={props => (verificaAutenticacao(<App {...props} children={<ResumoMensal {...props}/>} />))} />			
 			<Route path="/resumofinanceiro" render={props => (verificaAutenticacao(<App {...props} children={<ResumoFinanceiro {...props}/>} />))} />
+			<Route path="/faturamento" render={props => (verificaAutenticacao(<App {...props} children={<Faturamento {...props}/>} />))} />			
+			<Route path="/despesascategoria" render={props => (verificaAutenticacao(<App {...props} children={<DespesasCategoria {...props}/>} />))} />						
 			<Route path="/*" render={() => (<Redirect to={'/'}/>)} />				
 		</Switch>
 	</Router>)

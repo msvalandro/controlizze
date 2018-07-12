@@ -16,7 +16,8 @@ export default class ResumoFinanceiro extends Component {
 			saldoDespesa: 0,
 			arraySaldo: [],
 			saldoMes: 0,
-			arraySaldoAnterior: []
+			arraySaldoAnterior: [],
+			lancamentos: []
 		};
 	}
 
@@ -64,23 +65,24 @@ export default class ResumoFinanceiro extends Component {
 				}
 			})
 			.then(lancamentos => {
-				this.saldoMesAnterior(lancamentos);
-				this.saldoMes(lancamentos);
+				this.setState({lancamentos});
+				this.saldoMesAnterior();
+				this.saldoMes();
 			})
 			.catch(err => console.log(err));
 	}
 
-	saldoMesAnterior(lancamentos) {
+	saldoMesAnterior() {
 		let arraySaldoAnterior = [];
 
 		for(let i = 0; i < 12; i++) {
 			let saldoMesAnterior = 0;
 
-			lancamentos.forEach(l => {
+			this.state.lancamentos.forEach(l => {
 				let d = new Date(l.data);
 				d.setMonth(d.getMonth() + 1);
 
-				if (d.getMonth() === i && (d.getFullYear() === this.state.ano || (d.getMonth() === 11 && d.getFullYear() === this.state.ano - 1))) {
+				if (d.getMonth() === i && (d.getFullYear() === parseInt(this.state.ano, 10) || (d.getMonth() === 11 && d.getFullYear() === parseInt(this.state.ano, 10) - 1))) {
 					if (l.tipolancamentoId === 1) {
 						saldoMesAnterior += parseFloat(l.valor);
 					} else {
@@ -94,7 +96,7 @@ export default class ResumoFinanceiro extends Component {
 		this.setState({arraySaldoAnterior});
 	}
 
-	saldoMes(lancamentos) {
+	saldoMes() {
 		let arraySaldo = [];
 		let arrayReceita = [];
 		let arrayDespesa = [];		
@@ -104,10 +106,10 @@ export default class ResumoFinanceiro extends Component {
 			let saldoReceita = 0;			
 			let saldoDespesa = 0;
 
-			lancamentos.forEach(l => {
+			this.state.lancamentos.forEach(l => {
 				let d = new Date(l.data);
 
-				if (d.getMonth() === i && d.getFullYear() === this.state.ano) {
+				if (d.getMonth() === i && d.getFullYear() === parseInt(this.state.ano, 10)) {
 					if (l.tipolancamentoId === 1) {
 						saldoMes += parseFloat(l.valor);
 						saldoReceita += parseFloat(l.valor);
@@ -125,7 +127,7 @@ export default class ResumoFinanceiro extends Component {
 		let saldoTotal = 0;
 		let saldoTotalReceita = 0;
 		let saldoTotalDespesa = 0;
-		
+
 		arraySaldo.forEach(s => {
 			saldoTotal += s.valor;
 		});
@@ -187,7 +189,7 @@ export default class ResumoFinanceiro extends Component {
 							placeholder="Informe o ano de referência..." />
 					</div>
 				</div>
-				<div id="div-resumo-financeiro" className="resumo-financeiro" ref={el => (this.componentRef = el)}>
+				<div id="div-relatorio-impressao" className="relatorio-impressao" ref={el => (this.componentRef = el)}>
 					<h3 style={{textAlign: 'center', marginTop: '30px'}}>Resumo Financeiro</h3>
 					<div className="row">
 						<div className="col-md-3"><h6>{`Data de Emissão: ${this.formataData(new Date())}`}</h6></div>
@@ -260,7 +262,7 @@ export default class ResumoFinanceiro extends Component {
 					<div className="col-md-3" style={{textAlign: 'right'}}>
 						<ReactToPrint 
 							trigger={() => <button type="button" className="btn btn-lg btn-outline-dark"><i className="fas fa-print"></i></button>}
-							bodyClass="resumo-financeiro-print"
+							bodyClass="relatorio-impressao-print"
 							content={() => this.componentRef}
 						/>
 					</div>

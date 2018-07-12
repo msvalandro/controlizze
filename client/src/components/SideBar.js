@@ -128,19 +128,19 @@ export default class SideBar extends Component {
 						<div id="collapseRelatorios" className="collapse">
 							<ul className="collapse-listas">
 								<li>
-									<Link to={'/lancamento'}>
+									<Link to={'/declaracaoanual'}>
 										<div className="row">
 											<div style={{marginLeft: '25px'}}>
-												Lista de Recebimentos
+												Declaração Anual
 											</div>
 										</div>
 									</Link>
 								</li>
 								<li>
-									<Link to={'/lancamento'}>
+									<Link to={'/resumomensal'}>
 										<div className="row">
 											<div style={{marginLeft: '25px'}}>
-												Lista de Pagamentos
+												Resumo Mensal
 											</div>
 										</div>
 									</Link>
@@ -150,6 +150,43 @@ export default class SideBar extends Component {
 										<div className="row">
 											<div style={{marginLeft: '25px'}}>
 												Resumo Financeiro
+											</div>
+										</div>
+									</Link>
+								</li>
+							</ul>
+						</div>
+						<li className="clicavel">
+							<Link to={'#collapseGraficos'} data-toggle="collapse">
+								<div className="row">
+									<div className="text-center" style={{width: '5px'}}>
+										<i className="fas fa-chart-line" style={{paddingLeft: '5px'}}></i>
+									</div>
+									<div style={{marginLeft: '45px'}}>
+										Gráficos
+									</div>
+									<div style={{width: '40px', float: 'right', position: 'absolute', right: '40px'}}>
+										<i className="fas fa-chevron-right fa-xs"></i>
+									</div>
+								</div>
+							</Link>
+						</li>
+						<div id="collapseGraficos" className="collapse">
+							<ul className="collapse-listas">
+								<li>
+									<Link to={'/faturamento'}>
+										<div className="row">
+											<div style={{marginLeft: '25px'}}>
+												Faturamento p/ Mês
+											</div>
+										</div>
+									</Link>
+								</li>
+								<li>
+									<Link to={'/despesascategoria'}>
+										<div className="row">
+											<div style={{marginLeft: '25px'}}>
+												Despesas p/ Categoria
 											</div>
 										</div>
 									</Link>

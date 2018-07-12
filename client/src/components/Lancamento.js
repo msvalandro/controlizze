@@ -41,6 +41,8 @@ export default class Lancamento extends Component {
 	}
 
 	componentDidMount() {
+		console.log(this.descricao.input);
+
 		$('#check-emissaonf').click(function() {
 			if ($(this).is(':checked')) {
 				$('#numero-nota').removeAttr('disabled');
