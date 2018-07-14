@@ -5,6 +5,7 @@ import cors from 'cors';
 import config from './config';
 import database from './database';
 import authorization from './auth';
+import migration from './migration';
 
 const app = express();
 app.config = config;
@@ -20,9 +21,12 @@ app.auth = auth;
 
 consign()
   .include('models')
+  .then('controllers/usuario.js')
   .then('controllers')
   .then('routes/auth.js')
   .then('routes')
   .into(app);
+
+migration(app);
 
 export default app;

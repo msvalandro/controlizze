@@ -126,15 +126,31 @@ export default class Empresa extends Component {
 							'Authorization': `bearer ${localStorage.getItem('auth-token')}`
 						})
 					};
+					console.log('reasdad');
 					fetch('http://localhost:8080/api/empresas', requestInfo)
 						.then(response => {
 							if (response.ok) {
+								console.log('entrei111');
 								this.props.history.push('/');
 							} else {
+								console.log('entrei');
+								this.setState({msg: 'Não foi possível deletar a empresa do sistema.', tipoAlerta: 'danger'});
+								$('#notificacao-empresa').show();
+								setTimeout(() => {
+									$('#notificacao-empresa').fadeOut(1000);						
+								}, 2000);
 								throw new Error('Não foi possível deletar a empresa do sistema.');
 							}
+							console.log('then');
 						})
-						.catch(error => console.log('Ocorreu um erro ao excluir o cadastro do sistema.'));
+						.catch(error => {
+							console.log('err');
+							this.setState({msg: 'Não foi possível deletar a empresa do sistema.', tipoAlerta: 'danger'});
+							$('#notificacao-empresa').show();
+							setTimeout(() => {
+								$('#notificacao-empresa').fadeOut(1000);						
+							}, 2000);
+						});
 				});
 			}
 		});

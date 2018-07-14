@@ -14,6 +14,8 @@ import Perfil from './components/Perfil';
 import Empresa from './components/Empresa';
 import Lancamento from './components/Lancamento';
 import Lancamentos from './components/Lancamentos';
+import Lembrete from './components/Lembrete';
+import Lembretes from './components/Lembretes';
 import Dashboard from './components/Dashboard';
 import Categoria from './components/Categoria';
 import DeclaracaoAnual from './components/reports/DeclaracaoAnual';
@@ -44,6 +46,8 @@ ReactDOM.render(
 			<Route path="/lancamentos" render={props => (verificaAutenticacao(<App {...props} children={<Lancamentos {...props}/>} />))} />			
 			<Route path="/empresa" render={props => (verificaAutenticacao(<App {...props} children={<Empresa {...props}/>} />))} />			
 			<Route path="/categoria" render={props => (verificaAutenticacao(<App {...props} children={<Categoria {...props}/>} />))} />			
+			<Route path="/lembrete" render={props => (verificaAutenticacao(<App {...props} children={<Lembrete {...props}/>} />))} />			
+			<Route path="/lembretes" render={props => (verificaAutenticacao(<App {...props} children={<Lembretes {...props}/>} />))} />						
 			<Route path="/declaracaoanual" render={props => (verificaAutenticacao(<App {...props} children={<DeclaracaoAnual {...props}/>} />))} />						
 			<Route path="/resumomensal" render={props => (verificaAutenticacao(<App {...props} children={<ResumoMensal {...props}/>} />))} />			
 			<Route path="/resumofinanceiro" render={props => (verificaAutenticacao(<App {...props} children={<ResumoFinanceiro {...props}/>} />))} />

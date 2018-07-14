@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
+import Calendar from 'react-calendar';
+import $ from 'jquery';
+import '../assets/css/calendario.css';
 
 export default class Dashboard extends Component {
 
@@ -7,6 +10,7 @@ export default class Dashboard extends Component {
 		super();
 		this.state = {
 			lancamentos: [],
+			lembretes: [],
 			categorias: [],
 			saldo: 0,
 			arraySaldo: [],
@@ -14,7 +18,8 @@ export default class Dashboard extends Component {
 			arrayCategorias: [],
 			cores: [],
 			chartData: {},
-			faturamentoData: {}
+			faturamentoData: {},
+			date: new Date()
 		}
 	}
 
@@ -25,22 +30,46 @@ export default class Dashboard extends Component {
 			})
 		};
 
-		if (this.props.empresa.id !== undefined) {
-			fetch(`http://localhost:8080/api/lancamentos/${this.props.empresa.id}`, requestInfo)
-					.then(response => {
-						if (response.ok) {
-							return response.json();
-						} else {
-							throw new Error('Não foi possível acessar os dados do sistema.');
-						}
-					})
-					.then(lancamentos => {
-						this.setState({lancamentos});
-						this.calculaSaldo();
-						this.calculaReceita();
-						this.getCategorias(this.props.empresa.id);
-					});
-		}
+		setTimeout(() => {
+			if (this.props.empresa !== {} && this.props.empresa !== null) {
+				fetch(`http://localhost:8080/api/lancamentos/${this.props.empresa.id}`, requestInfo)
+						.then(response => {
+							if (response.ok) {
+								return response.json();
+							} else {
+								throw new Error('Não foi possível acessar os dados do sistema.');
+							}
+						})
+						.then(lancamentos => {
+							this.setState({lancamentos});
+							this.getLembretes(this.props.empresa.id);
+							this.calculaSaldo();
+							this.calculaReceita();
+							this.getCategorias(this.props.empresa.id);
+						});
+			}
+		}, 200);
+	}
+
+	getLembretes(empresaId) {
+		const requestInfo = {
+			headers: new Headers({
+				'Authorization': `bearer ${localStorage.getItem('auth-token')}`
+			})
+		};
+
+		fetch(`http://localhost:8080/api/lembretes/${this.props.empresa.id}`, requestInfo)
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					throw new Error('Não foi possível acessar os dados do sistema.');
+				}
+			})
+			.then(lembretes => {
+				this.setState({lembretes});
+				this.configuraCalendario();
+			});
 	}
 
 	getCategorias(empresaId) {
@@ -165,6 +194,27 @@ export default class Dashboard extends Component {
 		return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + 0.6 + ')';
 	}
 
+	onChange(date) {
+		this.setState({date});
+	}
+
+	configuraCalendario() {
+		$('.react-calendar').addClass('menu-calendario');
+		let time = $('.tile-lembrete').find('time');
+
+		for (let i = 0; i < time.length; i++) {
+			const element = time[i];
+			let date = new Date(element.getAttribute('datetime'));
+			
+			this.state.lembretes.forEach(l => {
+				let data = new Date(l.data);
+				if (date.getDate() === data.getDate() && date.getMonth() === data.getMonth() && date.getFullYear() === data.getFullYear()) {
+					element.parentElement.classList.add('tile-lembrete-note');
+				}
+			});
+		}
+	}
+
 	render() {
 		return(
 			<div className="container">
@@ -175,7 +225,38 @@ export default class Dashboard extends Component {
 						<p style={{fontSize: '1.35rem'}} className="text-center">R$ {this.state.saldo.toFixed(2)}</p>
 					</div>
 				</div>
-				<div className="row">
+				<div style={{marginTop: '50px'}} className="row">
+					<div className="col-md-1"></div>
+					<div className="col-md-5">
+						<Calendar 
+							value={this.state.date}
+							onChange={value => this.onChange(value)}
+							tileClassName={'tile-lembrete'}
+							onActiveDateChange={() => this.configuraCalendario()}
+						/>
+					</div>
+					<div className="col-md-6 menu-calendario">
+						<h3 style={{marginBottom: '20px'}}>Lembretes:</h3>
+						{this.state.lembretes.map(lembrete => {
+							let dataLembrete = new Date(lembrete.data).setHours(0, 0, 0, 0);
+							let dataCalendario = this.state.date.setHours(0, 0, 0, 0);
+
+							if (dataLembrete === dataCalendario) {
+								return(
+									<div key={lembrete.id} className="row" style={{paddingLeft: '30px', marginBottom: '3px'}}>
+										<i className="fas fa-caret-right" style={{marginRight: '5px'}}></i>
+										<h6>{lembrete.nome}</h6>
+									</div>
+								)
+							} else {
+								return(
+									<div key={lembrete.id}></div>
+								)
+							}
+						})}
+					</div>
+				</div>
+				<div style={{marginTop: '50px', marginBottom: '50px'}} className="row">
 					<div className="col-md-5" style={{paddingTop: '20px'}}>
 						<Doughnut
 							data={this.state.chartData}

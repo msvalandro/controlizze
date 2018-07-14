@@ -5,7 +5,7 @@ module.exports = (app) => {
 	const { categorialancamento } = app.database.models;
 	const { empresa } = app.database.models;
 	let emp;
-
+	
 	const validaDados = dados => {
 		let errors = [];
 

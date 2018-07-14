@@ -116,7 +116,9 @@ export default class DespesasCategoria extends Component {
 		let arraySaldo = [];
 		let arrayChartData = [];
 		
-		this.state.categorias.forEach(c => {		
+		this.state.categorias.forEach(c => {
+			dado = {};
+			arraySaldo = [];	
 			for(let i = 0; i < 12; i++) {
 				let saldoMes = 0;
 
@@ -129,16 +131,15 @@ export default class DespesasCategoria extends Component {
 						}
 					}
 				});
-
 				arraySaldo.push(saldoMes);
 			}
 
 			dado.label = c.descricao;
 			dado.data = arraySaldo;
 			dado.backgroundColor = this.random_rgba();
-
 			arrayChartData.push(dado);
-		});		
+		});
+		console.log(arrayChartData);
 		this.setState({arrayChartData});
 		this.getChartData();
 	}

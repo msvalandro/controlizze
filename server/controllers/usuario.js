@@ -5,7 +5,7 @@ import Sequelize from 'sequelize';
 module.exports = app => {
 	const api = {};
 	const config = app.config;
-	const { usuario, empresa, lancamento } = app.database.models;
+	const { usuario, empresa, lancamento, tipolancamento } = app.database.models;
 	const Op = Sequelize.Op;
 	
 	const validaDados = dados => {
@@ -25,6 +25,10 @@ module.exports = app => {
 
 		if (typeof dados.senha != 'undefined' && dados.senha.length < 6) { 
 			errors.push({field: 'senha', message: 'A senha deve ter no mínimo 6 dígitos.'});
+		}
+
+		if (dados.senha !== dados.senhaConfirma) {
+			errors.push({field: 'senha', message: 'As senhas digitadas não conferem.'});
 		}
 
 		return errors;
@@ -56,7 +60,8 @@ module.exports = app => {
 						token: jwt.sign(payload, config.jwtSecret, {expiresIn: 84600})
 					});
 				} else {
-					res.json('Já existe uma conta utilizando este e-mail.');
+					res.status(HttpStatus.BAD_REQUEST).json([{field: 'email', message: 'Já existe uma conta utilizando este e-mail.'}]);
+					return;
 				}
 			})
 			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
@@ -71,9 +76,8 @@ module.exports = app => {
 
 		if(req.body.flagSenha) {
 			user.senha = req.body.senha;
+			user.senhaConfirma = req.body.senhaConfirma;
 		}
-
-		console.log(user);
 
 		let errors = validaDados(user);		
 
@@ -89,7 +93,7 @@ module.exports = app => {
 						.then(result => res.json(result))
 						.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
 				} else {
-					res.json('Já existe uma conta utilizando este e-mail.');
+					res.status(HttpStatus.BAD_REQUEST).json([{field: 'email', message: 'Já existe uma conta utilizando este e-mail.'}]);
 					return;
 				}
 			})

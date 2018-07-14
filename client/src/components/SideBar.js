@@ -85,7 +85,7 @@ export default class SideBar extends Component {
 						<div id="collapseLancamentos" className="collapse">
 							<ul className="collapse-listas">
 								<li>
-									<Link to={'/lancamento'}>
+									<Link to={{pathname: '/lancamento', state: {id: 0}}}>
 										<div className="row">
 											<div style={{width: '5px'}}>
 												<i className="fas fa-plus"></i>
@@ -98,6 +98,49 @@ export default class SideBar extends Component {
 								</li>
 								<li>
 									<Link to={'/lancamentos'}>
+										<div className="row">
+											<div style={{width: '5px'}}>
+												<i className="fas fa-list"></i>
+											</div>
+											<div style={{marginLeft: '45px'}}>
+												Lista
+											</div>
+										</div>
+									</Link>
+								</li>
+							</ul>
+						</div>
+						<li className="clicavel">
+							<Link to={'#collapseLembretes'} data-toggle="collapse">
+								<div className="row">
+									<div className="text-center" style={{width: '5px'}}>
+										<i className="far fa-calendar-alt" style={{paddingLeft: '5px'}}></i>
+									</div>
+									<div style={{marginLeft: '45px'}}>
+										Lembretes
+									</div>
+									<div style={{width: '40px', float: 'right', position: 'absolute', right: '40px'}}>
+										<i className="fas fa-chevron-right fa-xs"></i>
+									</div>
+								</div>
+							</Link>
+						</li>
+						<div id="collapseLembretes" className="collapse">
+							<ul className="collapse-listas">
+								<li>
+									<Link to={{pathname: '/lembrete', state: {id: 0}}}>
+										<div className="row">
+											<div style={{width: '5px'}}>
+												<i className="fas fa-plus"></i>
+											</div>
+											<div style={{marginLeft: '45px'}}>
+												Novo
+											</div>
+										</div>
+									</Link>
+								</li>
+								<li>
+									<Link to={'/lembretes'}>
 										<div className="row">
 											<div style={{width: '5px'}}>
 												<i className="fas fa-list"></i>

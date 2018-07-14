@@ -75,10 +75,13 @@ class App extends Component {
 				<Header usuario={this.state.usuario} />
 				<SideBar />
 				<div id="principal" style={{marginLeft: '250px', marginTop: '56px'}}>				
-					{this.state.primeiroAcesso &&				
+					{this.state.primeiroAcesso ? (				
 						<ModalEmpresa mostra={this.state.primeiroAcesso}/>
-					}
-					{childrenWithProps}
+					) : (
+						<div>
+							{childrenWithProps}
+						</div>
+					)}
 				</div>
 			</div>
 		);

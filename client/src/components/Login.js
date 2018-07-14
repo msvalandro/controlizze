@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import Notificacao from './utils/Notificacao';
 import '../assets/css/login.css';
 import logo from '../assets/img/random-logo2.png';
@@ -9,7 +10,8 @@ class Login extends Component {
 	constructor() {
 		super();
 		this.state = {
-			msg: ''
+			msg: '',
+			mostra: 1
 		}
 	}
 
@@ -24,27 +26,38 @@ class Login extends Component {
 			})
 		};
 
+		this.setState({mostra: 1});
+
 		fetch('http://localhost:8080/autentica', requestInfo)
 			.then(response => {
 				if (response.ok) {
 					return response.json();
+				} else if (response.status === 401) {
+					this.setState({mostra: 0});
+					this.mostraMensagem('Usuário ou senha inválidos.');
 				} else {
-					throw new Error('Não foi possível fazer o login.');
+					this.mostraMensagem('Não foi possível acessar o recurso no sistema.');					
 				}
 			})
 			.then(result => {
 				localStorage.setItem('auth-token', result.token);
 				this.props.history.push('/');
 			})
-			.catch(error => {
-				this.setState({msg: 'Usuário ou senha inválidos.'});
-			});
+			.catch(() => this.state.mostra === 1 ? this.mostraMensagem('Não foi possível acessar o recurso no sistema.') : null);
+	}
+
+	mostraMensagem(mensagem) {
+		this.setState({msg: mensagem});
+		$('#notificacao-login').show();
+		setTimeout(() => {
+			$('#notificacao-login').fadeOut(1000);
+		}, 2000);
 	}
 
 	render() {
 		return(
 			<div className="fundo-tela">
-				<Notificacao tipoAlerta="danger" texto={this.state.msg} />
+				<Notificacao id="notificacao-login" tipoAlerta="danger" texto={this.state.msg} />
 				<div className="container">
 					<div className="card card-container">
 						<img src={logo} alt="logo" className="img-card" />

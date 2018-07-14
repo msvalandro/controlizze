@@ -13,6 +13,7 @@
     "popper.js": "^1.12.9",
     "pubsub-js": "^1.6.0",
     "react": "^16.2.0",
+    "react-calendar": "^2.16.0",
     "react-chartjs-2": "^2.7.2",
     "react-dom": "^16.2.0",
     "react-input-mask": "^1.2.2",

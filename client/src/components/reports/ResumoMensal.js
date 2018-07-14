@@ -50,6 +50,9 @@ export default class ResumoMensal extends Component {
 	envia(event) {
 		event.preventDefault();
 
+		console.log(this.formataData(this.datainicio.input.value));
+		console.log(this.formataData(this.datafinal.input.value));
+
 		this.setState({datainicio: this.formataData(this.datainicio.input.value)});
 		this.setState({datafinal: this.formataData(this.datafinal.input.value)});
 
@@ -75,12 +78,18 @@ export default class ResumoMensal extends Component {
 	}
 
 	formataData(date) {
-		let data = new Date(date);
+		date = date.split('/');
+		let data = new Date(date[2], date[1] - 1, date[0]);
 		let dia = data.getDate();
 		let mes = data.getMonth() + 1;
 		let ano = data.getFullYear();
 
 		return `${(dia > 9 ? '' : '0') + dia}/${(mes > 9 ? '' : '0') + mes}/${ano}`;
+	}
+
+	criaData(date) {
+		date = date.split('/');
+		return new Date(date[2], date[1] - 1, date[0]);
 	}
 
 	calculaSaldos() {
@@ -95,29 +104,29 @@ export default class ResumoMensal extends Component {
 		this.state.lancamentos.forEach(l => {
 			let d = new Date(l.data);
 			d.setHours(0, 0, 0, 0);
-			let inicio = new Date(this.state.datainicio);
+			let inicio = this.criaData(this.state.datainicio);
 			inicio.setHours(0, 0, 0, 0);
-			let fim = new Date(this.state.datafinal);
+			let fim = this.criaData(this.state.datafinal);
 			fim.setHours(0, 0, 0, 0);
 
-			//mudar depois
 			if (d >= inicio && d <= fim) {
-				if (l.categorialancamentoId === 2 && l.numeronf === null) {
+				console.log('entrei dentro');
+				if (l.categorialancamentoId === 1 && l.numeronf === null) {
 					comercioSemNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 2) {
+				} else if (l.categorialancamentoId === 1) {
 					comercioComNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 3 && l.numeronf === null) {
+				} else if (l.categorialancamentoId === 2 && l.numeronf === null) {
 					industriaSemNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 3) {
+				} else if (l.categorialancamentoId === 2) {
 					industriaComNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 4 && l.numeronf === null) { 
+				} else if (l.categorialancamentoId === 3 && l.numeronf === null) { 
 					servicoSemNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 4) {
+				} else if (l.categorialancamentoId === 3) {
 					servicoComNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
 				}

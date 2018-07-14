@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PubSub from 'pubsub-js';
+import $ from 'jquery';
 import TratadorErros from './utils/TratadorErros';
 import Notificacao from './utils/Notificacao';
 import InputCustomizado, { SubmitCustomizado } from './utils/CampoCustomizado';
@@ -11,27 +12,30 @@ class CadastroUsuario extends Component {
 		super();
 		this.state = {
 			msg: '',
-			tipoAlerta: 'danger'
+			tipoAlerta: 'danger',
+			mostra: 1
 		}
 	}
 
 	envia(event) {
 		event.preventDefault();
 
-		if (this.senha.input.value !== this.senhaConfirma.input.value) {
-			this.setState({msg: 'As senhas digitadas não conferem.'});	
-			return;
-		} else {
-			this.setState({msg: ''});
-		}
-
 		const requestInfo = {
 			method: 'POST',
-			body: JSON.stringify({primeiroNome: this.primeiroNome.input.value, sobreNome: this.sobreNome.input.value, email: this.email.input.value, senha: this.senha.input.value}),
+			body: JSON.stringify({
+				primeiroNome: this.primeiroNome.input.value, 
+				sobreNome: this.sobreNome.input.value, 
+				email: this.email.input.value, 
+				senha: this.senha.input.value,
+				senhaConfirma: this.senhaConfirma.input.value
+
+			}),
 			headers: new Headers({
 				'Content-type': 'application/json'
 			})
 		};
+
+		this.setState({mostra: 1});
 
 		fetch('http://localhost:8080/usuarios', requestInfo)
 			.then(response => {
@@ -39,6 +43,7 @@ class CadastroUsuario extends Component {
 				if (response.ok) {
 					return response.json();
 				} else if (response.status === 400) {
+					this.setState({mostra: 0});
 					new TratadorErros().publicaErros(response.json());
 				} else {
 					this.setState({msg: 'Ocorreu um erro ao realizar o cadastro no sistema.', tipoAlerta: 'danger'});
@@ -55,16 +60,24 @@ class CadastroUsuario extends Component {
 					}
 				}
 			})
-			.catch(error => console.log(error));
+			.catch(() => this.state.mostra === 1 ? this.mostraMensagem('Não foi possível acessar o recurso no sistema.') : null);
+	}
+
+	mostraMensagem(mensagem) {
+		this.setState({msg: mensagem});
+		$('#notificacao-cadastro-usuario').show();
+		setTimeout(() => {
+			$('#notificacao-cadastro-usuario').fadeOut(1000);
+		}, 2000);
 	}
 
 	render() {
 		return(
-			<div className="cadastro-usuario-tela">
-				<Notificacao tipoAlerta="danger" texto={this.state.msg} />
+			<div className="fundo-tela">
+				<Notificacao id="notificacao-cadastro-usuario" tipoAlerta="danger" texto={this.state.msg} />
 				<div className="container card cadastro-usuario-form col-md-6">
-					<h2 className="text-center">Cadastro de Usuário</h2>
-					<form onSubmit={this.envia.bind(this)}>
+					<h2 style={{marginTop: '10px'}} className="text-center">Cadastro de Usuário</h2>
+					<form className="cadastro-usuario" onSubmit={this.envia.bind(this)}>
 						<div className="row">
 							<InputCustomizado htmlFor="primeiro-nome" titulo="Primeiro nome" className="col-md-6"
 								tipo="text" id="primeiro-nome" required="true" nome="primeiroNome"

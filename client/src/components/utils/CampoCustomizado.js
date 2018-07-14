@@ -154,7 +154,7 @@ export class TextAreaCustomizado extends Component {
 
 	render() {
 		return(
-			<div className="form-group">
+			<div className={"form-group " + this.props.className}>
 				<label htmlFor={this.props.htmlFor}>{this.props.titulo}</label>
 				<textarea id={this.props.id} required={this.props.required}
 					ref={this.props.referencia}

@@ -2,8 +2,7 @@ import HttpStatus from 'http-status';
 
 module.exports = (app) => {
 	const api = {};
-	const { empresa } = app.database.models;
-	const { categorialancamento } = app.database.models;
+	const { empresa, categorialancamento, lancamento } = app.database.models;
 
 	const validaData = data => {
 		let errors = [];
@@ -143,9 +142,14 @@ module.exports = (app) => {
 	};
 
 	api.deleta = (req, res) => {
-		empresa.destroy({ where: {usuarioId: req.user.id} })
-			.then(() => res.sendStatus(HttpStatus.NO_CONTENT))
-			.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+		empresa.findOne({where: {usuarioId: req.user.id}})
+			.then(result => {
+				lancamento.destroy({where: {empresaId: result.id}});
+				empresa.destroy({where: {usuarioId: req.user.id} })
+					.then(() => res.sendStatus(HttpStatus.NO_CONTENT))
+					.catch(() => res.status(HttpStatus.PRECONDITION_FAILED));
+			})
+			.catch(err => console.log(err));
 	};
 
 	return api;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
+import Notificacao from './utils/Notificacao';
 import { SubmitCustomizado } from './utils/CampoCustomizado';
 
 export default class Lancamentos extends Component {
@@ -102,6 +103,11 @@ export default class Lancamentos extends Component {
 					setTimeout(() => {
 						linha.remove();
 					}, 400);
+					this.setState({msg: 'Dados excluídos com sucesso.', tipoAlerta: 'success'});
+					$('#notificacao-lancamentos').show();				
+					setTimeout(() => {
+						$('#notificacao-lancamentos').fadeOut(1000);						
+					}, 2000);
 					this.setState({lancamentos: this.state.lancamentos.filter(l => l.id !== id)});
 					this.lancamentosPorMes(new Date(this.state.lancamentosDoMes.find(l => l.id === id).data));
 				} else {
@@ -114,6 +120,7 @@ export default class Lancamentos extends Component {
 	render() {
 		return(
 			<div className="container">
+				<Notificacao id="notificacao-lancamentos" estilo={{marginBottom: '10px'}} tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />				
 				<div id="mes-lancamento" className="row">
 					<div id="prev"><i className="fas fa-2x fa-chevron-left"></i></div>
 					<div className="col-md-8">

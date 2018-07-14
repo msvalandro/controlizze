@@ -19,9 +19,24 @@ div.container {
     .absolut-center {
         left: 0;
     }
+    .menu-calendario {
+        margin-top: 20px;
+    }
 }
 
 .centralizado {
     width: 50%;
     margin: 0 auto;
+}
+
+:invalid {
+    box-shadow: none;
+}
+
+:-moz-submit-invalid {
+    box-shadow: none;
+}
+
+:-moz-ui-invalid {
+    box-shadow: none;
 }

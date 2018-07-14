@@ -121,11 +121,18 @@ export default class Categoria extends Component {
 						linha.remove();
 					}, 400);
 					this.setState({categorias: this.state.categorias.filter(c => c.id !== id)});
-					this.setState({msg: 'Categoria excluída com sucesso.', tipoAlerta: 'danger'});
+					this.setState({msg: 'Categoria excluída com sucesso.', tipoAlerta: 'success'});
 					$('#notificacao-categoria').show();				
 					setTimeout(() => {
 						$('#notificacao-categoria').fadeOut(1000);						
 					}, 2000);
+				} else if (response.status === 412) {
+					this.setState({msg: 'Já existem lançamentos vinculados a esta categoria.', tipoAlerta: 'danger'});
+					$('#notificacao-categoria').show();					
+					setTimeout(() => {
+						$('#notificacao-categoria').fadeOut(1000);						
+					}, 2000);
+					return;
 				} else {
 					throw new Error('Não foi possível deletar a categoria do sistema.');
 				}

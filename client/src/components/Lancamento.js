@@ -41,8 +41,6 @@ export default class Lancamento extends Component {
 	}
 
 	componentDidMount() {
-		console.log(this.descricao.input);
-
 		$('#check-emissaonf').click(function() {
 			if ($(this).is(':checked')) {
 				$('#numero-nota').removeAttr('disabled');
@@ -73,29 +71,37 @@ export default class Lancamento extends Component {
 			})
 		};
 
-		if (this.props.location.state !== undefined && this.props.empresa.id !== undefined) {
-			fetch(`http://localhost:8080/api/lancamento/${this.props.location.state.id}/${this.props.empresa.id}`, requestInfo)
-				.then(response => {
-					if (response.ok) {
-						return response.json();
-					} else {
-						this.setState({msg: 'Ocorreu um erro ao gravar o lançamento.', tipoAlerta: 'danger'});
-						throw new Error('Não foi possível cadastrar o lançamento no sistema.');
-					}
-				})
-				.then(result => {
-					this.setState({id: result.id});
-					this.descricao.input.value = result.descricao;
-					this.tipoLancamento.props.onChange(result.tipolancamentoId, result.categorialancamentoId);
-					if (result.numeronf !== null) {
-						$('#check-emissaonf').click();
-						this.numeroNota.input.value = result.numeronf;
-					}
-					this.setState({mascaraData: ''});
-					this.dataLancamento.input.value = this.formataData(result.data);
-					this.valorLancamento.input.value = result.valor;
-				});
-		}
+		setTimeout(() => {
+			if (this.props.location.state !== undefined && this.props.location.state.id !== 0 && this.props.empresa.id !== undefined) {
+				fetch(`http://localhost:8080/api/lancamento/${this.props.location.state.id}/${this.props.empresa.id}`, requestInfo)
+					.then(response => {
+						if (response.ok) {
+							return response.json();
+						} else {
+							this.setState({msg: 'Ocorreu um erro ao gravar o lançamento.', tipoAlerta: 'danger'});
+							throw new Error('Não foi possível cadastrar o lançamento no sistema.');
+						}
+					})
+					.then(result => {
+						this.setState({id: result.id});
+						this.descricao.input.value = result.descricao;
+						this.tipoLancamento.props.onChange(result.tipolancamentoId, result.categorialancamentoId);
+						if (result.numeronf !== null) {
+							$('#check-emissaonf').click();
+							this.numeroNota.input.value = result.numeronf;
+						}
+						this.setState({mascaraData: ''});
+						this.dataLancamento.input.value = this.formataData(result.data);
+						this.valorLancamento.input.value = result.valor;
+					});
+			} else if (this.props.location.state !== undefined) {
+				if (this.props.location.state.id === 0) {
+					this.setState({id: 0});
+					this.setState({mascaraData: '99/99/9999'});
+					this.limpaForm();
+				}
+			}
+		}, 300);
 	}
 
 	formataData(date) {
@@ -119,16 +125,31 @@ export default class Lancamento extends Component {
 
 		if (this.state.id === 0) {
 			requestInfo.method = 'POST';
-			requestInfo.body = JSON.stringify({descricao: this.descricao.input.value, tipolancamentoId: this.tipoLancamento.props.selectedValue, 
-				categorialancamentoId: this.categoriaLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
-				parcelado: this.parcelado.checked, parcelas: this.numeroParcelas.input.value, data: this.dataLancamento.input.value, 
-				valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
+			requestInfo.body = JSON.stringify({
+				descricao: this.descricao.input.value, 
+				tipolancamentoId: this.tipoLancamento.props.selectedValue, 
+				categorialancamentoId: this.categoriaLancamento.value, 
+				emissaoNf: this.emissaoNf.checked, 
+				numeronf: this.numeroNota.input.value, 
+				parcelado: this.parcelado.checked, 
+				parcelas: this.numeroParcelas.input.value, 
+				data: this.dataLancamento.input.value, 
+				valor: this.valorLancamento.input.value, 
+				empresaId: this.props.empresa.id
+			});
 		} else {
 			requestInfo.method = 'PUT';
-			requestInfo.body = JSON.stringify({id: this.state.id, descricao: this.descricao.input.value, tipolancamentoId: this.tipoLancamento.props.selectedValue, 
-				categorialancamentoId: this.categoriaLancamento.value, emissaoNf: this.emissaoNf.checked, numeronf: this.numeroNota.input.value, 
-				parcelado: this.parcelado.checked, parcelas: this.numeroParcelas.input.value, data: this.dataLancamento.input.value, 
-				valor: this.valorLancamento.input.value, empresaId: this.props.empresa.id});
+			requestInfo.body = JSON.stringify({
+				id: this.state.id, 
+				descricao: this.descricao.input.value, 
+				tipolancamentoId: this.tipoLancamento.props.selectedValue, 
+				categorialancamentoId: this.categoriaLancamento.value, 
+				emissaoNf: this.emissaoNf.checked, 
+				numeronf: this.numeroNota.input.value, 
+				data: this.dataLancamento.input.value, 
+				valor: this.valorLancamento.input.value, 
+				empresaId: this.props.empresa.id
+			});
 		}
 
 		fetch('http://localhost:8080/api/lancamentos', requestInfo)
@@ -161,7 +182,7 @@ export default class Lancamento extends Component {
 		this.setState({trocaCategoria: true});
 		this.tipoLancamento.props.onChange();		
 		if (this.emissaoNf.checked) $('#check-emissaonf').click();
-		if (this.emissaoNf.checked) $('#check-parcelado').click();
+		if (this.parcelado.checked) $('#check-parcelado').click();
 		this.dataLancamento.value = '';
 		this.dataLancamento.input.value = '';
 		this.valorLancamento.input.value = '';

@@ -13,7 +13,8 @@ export default class ModalEmpresa extends Component {
 		super();
 		this.state = {
 			msg: '',
-			tipoAlerta: ''
+			tipoAlerta: 'danger',
+			mostra: 1
 		}
 	}
 
@@ -52,15 +53,18 @@ export default class ModalEmpresa extends Component {
 			})
 		};
 
+		this.setState({mostra: 1});
+
 		fetch('http://localhost:8080/api/empresas', requestInfo)
 			.then(response => {
 				PubSub.publish('limpa-erros', {});
 				if (response.ok) {
 					return response.json();
 				} else if (response.status === 400) {
+					this.setState({mostra: 0});
 					new TratadorErros().publicaErros(response.json());
 				} else {
-					throw new Error('Ocorreu um erro ao cadastrart a empresa no sistema.');
+					this.mostraMensagem('Não foi possível acessar o recurso no sistema.');					
 				}
 			})
 			.then(result => {
@@ -76,13 +80,21 @@ export default class ModalEmpresa extends Component {
 					}, 2000);
 				}
 			})
-			.catch(error => console.log(error));
+			.catch(() => this.state.mostra === 1 ? this.mostraMensagem('Não foi possível acessar o recurso no sistema.') : null);
+	}
+
+	mostraMensagem(mensagem) {
+		this.setState({msg: mensagem});
+		$('#notificacao-modal-empresa').show();
+		setTimeout(() => {
+			$('#notificacao-modal-empresa').fadeOut(1000);
+		}, 2000);
 	}
 
 	render() {
 		return(
 			<div className="container">
-				<Notificacao id="notificacao-modal-empresa" tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />				
+				<Notificacao style={{marginTop: '50px'}} id="notificacao-modal-empresa" tipoAlerta={this.state.tipoAlerta} texto={this.state.msg} />
 				<div id="modal-empresa" className="modal" role="dialog">
 					<div className="modal-dialog modal-lg" role="document">
 						<div className="modal-content">

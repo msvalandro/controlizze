@@ -109,24 +109,23 @@ export default class DeclaracaoAnual extends Component {
 		this.state.lancamentos.forEach(l => {
 			let d = new Date(l.data);
 
-			//mudar depois
 			if (d.getFullYear() === parseInt(this.state.ano, 10)) {
-				if (l.categorialancamentoId === 2 && l.numeronf === null) {
+				if (l.categorialancamentoId === 1 && l.numeronf === null) {
 					comercioSemNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 2) {
+				} else if (l.categorialancamentoId === 1) {
 					comercioComNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 3 && l.numeronf === null) {
+				} else if (l.categorialancamentoId === 2 && l.numeronf === null) {
 					industriaSemNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 3) {
+				} else if (l.categorialancamentoId === 2) {
 					industriaComNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 4 && l.numeronf === null) { 
+				} else if (l.categorialancamentoId === 3 && l.numeronf === null) { 
 					servicoSemNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
-				} else if (l.categorialancamentoId === 4) {
+				} else if (l.categorialancamentoId === 3) {
 					servicoComNota += parseFloat(l.valor);
 					saldoTotal += parseFloat(l.valor);
 				}
